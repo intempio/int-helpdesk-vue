@@ -1,8 +1,9 @@
 <template>
     <section class="section">
         <div class="columns is-mobile">
+          <div v-show="isAssign" class="title">Assign Event</div>
           <div class="column is-half is-offset-one-quarter">
-              <div v-show="!isAdd">
+              <div v-show="!isAdd && !isAssign">
                 <b-field>
                   <b-input placeholder="Search..."
                     type="search"
@@ -14,7 +15,7 @@
                   </b-input>
                 </b-field>
               </div>
-              <section v-show="isAdd">
+              <section v-show="isAdd && !isAssign">
                 <b-field label="First Name">
                     <b-input v-model="firstName"></b-input>
                 </b-field>
@@ -37,7 +38,7 @@
              <b-table html
                 :data="tableData"
                 :loading="loading"
-                striped
+                :row-class="(row, index) => row.event && row.event.is_today && 'is-info'"
                 style="width: 100%"
                 >
 
@@ -46,10 +47,12 @@
                     {{ props.row.full_name }}
                   </b-table-column>
 
-                  <b-table-column field="event.event_name" label="Event Name">
+                  <b-table-column field="event.event_name" label="Event Name" >
                     <div v-if="!props.row.event">
                       not assigned to any current or future events
-                      <a class="button is-small is-link">Assign Event</a>
+                      <a class="button is-small is-link" @click="assignEvent(props.row)">
+                        Assign Event
+                      </a>
                     </div>
                     <span v-else>{{ props.row.event.event_name }}  </span>
                   </b-table-column>
@@ -63,11 +66,17 @@
                   </b-table-column>
 
                   <b-table-column field="pre_registered" label="Pre Registered">
-                    {{ props.row.pre_registered }}
+                    {{ props.row.pre_registered ? 'Yes' : 'No'}}
                   </b-table-column>
 
                   <b-table-column field="call_complete" label="Call Complete">
-                    {{ props.row.call_complete }}
+                    {{ props.row.call_complete ? 'Yes': 'No'}}
+                  </b-table-column>
+
+                  <b-table-column label="Assign Event" field="assign" v-if="isAssign">
+                    <a class="button is-small is-link" @click="createEventAttendee(props.row)">
+                          Assign Event
+                    </a>
                   </b-table-column>
 
               </template>
@@ -124,6 +133,12 @@ export default {
     },
   },
   methods: {
+    assignEvent(row) {
+        this.isAssign = true;
+        this.tableData = this.eventAttendees;
+        this.currentAttendee = row.id;
+        this.currentFullName = row.full_name;
+    },
     async fetchAttendees() {
       const response = await this.$axios.$get('attendees/recent/');
       this.attendees = response.results;
@@ -147,7 +162,18 @@ export default {
     debounceInput: _.debounce(function() {
       this.searchAttendees();
     }, 1000),
-    createEventAttendee() {},
+    createEventAttendee(row) {
+      this.$axios.post('event-attendees/', {
+        event: row.event.id,
+        attendee: this.currentAttendee
+      }).then(() => {
+        this.isAssign = false;
+        this.searchString = this.currentFullName;
+        this.searchAttendees();
+      }).catch((err) => {
+
+      });
+    },
   },
   data() {
     return {
@@ -158,10 +184,23 @@ export default {
       tableData: [],
       count: 1,
       isAdd: false,
+      isAssign: false,
       firstName: '',
       lastName: '',
       email: '',
+      currentAttendee: null,
+      currentFullName: '',
     };
   },
 };
 </script>
+
+<style>
+tr.is-info {
+  background: #167df0;
+}
+
+tr.is-info td {
+  color: #fff;
+}
+</style>
