@@ -166,10 +166,8 @@ export default {
       this.$axios.post('event-attendees/', {
         event: row.event.id,
         attendee: this.currentAttendee
-      }).then(() => {
-        this.isAssign = false;
-        this.searchString = this.currentFullName;
-        this.searchAttendees();
+      }).then(response => {
+        this.$router.push({name: 'attendees-id', params: { id: this.currentAttendee}});
       }).catch((err) => {
 
       });
