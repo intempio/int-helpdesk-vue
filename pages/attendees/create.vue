@@ -61,7 +61,8 @@
     },
     methods: {
       async createEventAttendee(row) {
-        const {data} = await this.$axios.post('attendees/', {
+        this.loading = true;
+        const data = await this.$axios.$post('attendees/', {
           first_name: this.firstName,
           last_name: this.lastName,
           email: this.email

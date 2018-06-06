@@ -8,25 +8,43 @@ const createStore = () => {
       currentAttendee: {
         id: '',
         full_name: ''
-      }
+      },
+      loading: false,
     },
     mutations: {
       set_attendees(state, attendees) {
         state.attendees = attendees;
       },
-
       set_attendee(state, {id, full_name}) {
         state.currentAttendee.id = id;
         state.currentAttendee.full_name = full_name;
+      },
+      set_loading(state) {
+        state.loading = !state.loading
       }
     },
     actions: {
       async GET_ATTENDEES({commit}, searchString = '') {
+        commit('set_loading');
         const response = await this.$axios.$get('attendees/recent/', {
           params: {search: searchString},
         });
         commit('set_attendees', response.results);
-      }
+        commit('set_loading');
+      },
+      async CREATE_EVENT_ATTENDEE({state, commit}, eventId) {
+        commit('set_loading');
+        await this.$axios
+          .post('event-attendees/', {
+            event: eventId,
+            attendee: state.currentAttendee.id,
+          });
+        commit('set_loading');
+        this.$router.push({
+          name: 'attendees-id',
+          params: {id: state.currentAttendee.id},
+        });
+      },
     },
     getters: {
       eventAttendees: state => {

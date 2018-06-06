@@ -4,7 +4,7 @@
     <div class="columns">
       <b-table html
                :data="$store.getters.eventAttendees"
-               :loading="loading"
+               :loading="$store.state.loading"
                :row-class="(row) => row.event && row.event.is_today && 'is-info'"
                style="width: 100%"
       >
@@ -54,19 +54,7 @@
     },
     methods: {
       createEventAttendee(row) {
-        this.$axios
-          .post('event-attendees/', {
-            event: row.event.id,
-            attendee: this.$store.state.currentAttendee.id,
-          })
-          .then(response => {
-            this.$router.push({
-              name: 'attendees-id',
-              params: {id: this.$store.state.currentAttendee.id},
-            });
-          })
-          .catch(err => {
-          });
+        this.$store.dispatch('CREATE_EVENT_ATTENDEE', row.event.id);
       },
     },
   };
