@@ -37,10 +37,6 @@
             label: 'Event Date',
           },
           {
-            field: 'event.ac_link',
-            label: 'Ac Link',
-          },
-          {
             field: 'pre_registered',
             label: 'Pre Registered',
           },
