@@ -1,0 +1,12 @@
+# Global settings applied to the whole site.
+[build]
+publish = "dist"
+command = "npm run generate"
+
+[context.production]
+  [context.production.environment]
+    SENTRY_PUBLIC_KEY = "https://biogen-helpdesk-api-prod.herokuapp.com/api/v1/"
+
+[context.branch-deploy]
+  [context.branch-deploy.environment]
+    BASE_URL = "https://biogen-helpdesk-api-prod.herokuapp.com/api/v1/"

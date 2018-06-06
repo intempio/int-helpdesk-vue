@@ -48,7 +48,7 @@ module.exports = {
     baseUrl: process.env.BASE_URL || 'http://localhost:8000/api/v1/',
   },
   axios: {
-    // proxyHeaders: false
+    proxyHeaders: false,
     baseURL: process.env.BASE_URL || 'http://localhost:8000/api/v1/',
   },
 
