@@ -5,6 +5,7 @@ const createStore = () => {
   return new Vuex.Store({
     state: {
       attendees: [],
+      events: [],
       currentAttendee: {
         id: '',
         full_name: ''
@@ -14,6 +15,9 @@ const createStore = () => {
     mutations: {
       set_attendees(state, attendees) {
         state.attendees = attendees;
+      },
+      set_events(state, events) {
+        state.events = events;
       },
       set_attendee(state, {id, full_name}) {
         state.currentAttendee.id = id;
@@ -30,6 +34,12 @@ const createStore = () => {
           params: {search: searchString},
         });
         commit('set_attendees', response.results);
+        commit('set_loading');
+      },
+      async GET_EVENTS({commit}) {
+        commit('set_loading');
+        const response = await this.$axios.$get('events/');
+        commit('set_events', response.results);
         commit('set_loading');
       },
       async CREATE_EVENT_ATTENDEE({state, commit}, eventId) {

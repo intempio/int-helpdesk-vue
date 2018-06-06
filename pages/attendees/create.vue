@@ -16,31 +16,19 @@
     </b-field>
 
     <b-table html
-             :data="$store.getters.eventAttendees"
+             :data="$store.state.events"
              :loading="loading"
              :row-class="(row) => row.event && row.event.is_today && 'is-info'"
              style="width: 100%"
     >
 
       <template scope="props">
-        <b-table-column field="event.event_name" label="Event Name">
-          {{ props.row.event.event_name }}
+        <b-table-column field="event_name" label="Event Name">
+          {{ props.row.event_name }}
         </b-table-column>
 
-        <b-table-column field="event.date" label="Event Date">
-          {{ props.row.event && props.row.event.date}}
-        </b-table-column>
-
-        <b-table-column field="event.ac_link" label="Ac Link">
-          {{ props.row.event && props.row.event.ac_link }}
-        </b-table-column>
-
-        <b-table-column field="pre_registered" label="Pre Registered">
-          {{ props.row.pre_registered ? 'Yes' : 'No'}}
-        </b-table-column>
-
-        <b-table-column field="call_complete" label="Call Complete">
-          {{ props.row.call_complete ? 'Yes': 'No'}}
+        <b-table-column field="date" label="Event Date">
+          {{ props.row.date}}
         </b-table-column>
 
         <b-table-column label="Assign">
@@ -56,8 +44,8 @@
 <script>
   export default {
     async fetch({store}) {
-      if (store.state.attendees.length === 0) {
-        await store.dispatch('GET_ATTENDEES');
+      if (store.state.events.length === 0) {
+        await store.dispatch('GET_EVENTS');
       }
     },
     methods: {
@@ -70,7 +58,7 @@
             email: this.email
           });
           await this.$axios.post('event-attendees/', {
-            event: row.event.id,
+            event: row.id,
             attendee: data.id,
           });
           this.$router.push({
