@@ -45,7 +45,7 @@
           </b-table-column>
 
           <b-table-column field="redirect_lookup_id" label="Ac Link">
-            <a :href="'http://i17r.com/' + props.row.redirect_lookup_id + '/'">
+            <a :href="'http://i17r.com/' + props.row.redirect_lookup_id">
               http://i17r.com/{{ props.row.redirect_lookup_id }}
             </a>
 
