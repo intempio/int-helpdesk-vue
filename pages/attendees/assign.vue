@@ -18,9 +18,6 @@
             {{ props.row.date}}
           </b-table-column>
 
-          <b-table-column field="ac_link" label="Ac Link">
-            {{ props.row.ac_link}}
-          </b-table-column>
 
           <b-table-column label="Assign">
             <a class="button is-small is-link" @click="createEventAttendee(props.row)">

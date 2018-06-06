@@ -45,7 +45,10 @@
           </b-table-column>
 
           <b-table-column field="event.ac_link" label="Ac Link">
-            {{ props.row.event && props.row.event.ac_link }}
+            <a :href="'http://i17r.com/' + props.row.event && props.row.event.redirect_lookup_id">
+              http://i17r.com/{{ props.row.event.redirect_lookup_id }}
+            </a>
+
           </b-table-column>
 
           <b-table-column field="pre_registered" label="Pre Registered">
