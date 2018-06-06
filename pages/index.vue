@@ -77,7 +77,7 @@
       },
       debounceInput: _.debounce(function () {
         this.$store.dispatch('GET_ATTENDEES', this.searchString)
-      }, 1000),
+      }, 500),
     },
     data() {
       return {
