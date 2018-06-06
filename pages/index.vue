@@ -44,9 +44,9 @@
             {{ props.row.event && props.row.event.date}}
           </b-table-column>
 
-          <b-table-column field="event.ac_link" label="Ac Link">
-            <a :href="'http://i17r.com/' + props.row.event && props.row.event.redirect_lookup_id">
-              http://i17r.com/{{ props.row.event.redirect_lookup_id }}
+          <b-table-column field="redirect_lookup_id" label="Ac Link">
+            <a :href="'http://i17r.com/' + props.row.redirect_lookup_id">
+              http://i17r.com/{{ props.row.redirect_lookup_id }}
             </a>
 
           </b-table-column>
