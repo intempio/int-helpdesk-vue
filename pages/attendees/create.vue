@@ -1,5 +1,6 @@
 <template>
   <div class="section">
+    <section class="content"><h4>Attendee does not exist</h4></section>
     <b-field label="First Name">
       <b-input v-model="firstName"></b-input>
     </b-field>
@@ -61,20 +62,25 @@
     },
     methods: {
       async createEventAttendee(row) {
-        this.loading = true;
-        const data = await this.$axios.$post('attendees/', {
-          first_name: this.firstName,
-          last_name: this.lastName,
-          email: this.email
-        });
-        await this.$axios.post('event-attendees/', {
-          event: row.event.id,
-          attendee: data.id,
-        });
-        this.$router.push({
-          name: 'attendees-id',
-          params: {id: data.id},
-        });
+        if (this.firstName.trim() && this.lastName.trim() && this.email.trim()) {
+          this.loading = true;
+          const data = await this.$axios.$post('attendees/', {
+            first_name: this.firstName,
+            last_name: this.lastName,
+            email: this.email
+          });
+          await this.$axios.post('event-attendees/', {
+            event: row.event.id,
+            attendee: data.id,
+          });
+          this.$router.push({
+            name: 'attendees-id',
+            params: {id: data.id},
+          });
+        } else {
+          alert('all fields are required');
+        }
+
       },
     },
     data() {

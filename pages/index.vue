@@ -75,8 +75,11 @@
         this.$store.commit('set_attendee', {id: row.id, full_name: row.full_name});
         this.$router.push({name: 'attendees-assign'});
       },
-      debounceInput: _.debounce(function () {
-        this.$store.dispatch('GET_ATTENDEES', this.searchString)
+      debounceInput: _.debounce(async function () {
+        await this.$store.dispatch('GET_ATTENDEES', this.searchString);
+        if (this.$store.getters.eventAttendees.length === 0) {
+          this.$router.push({name: 'attendees-create'});
+        }
       }, 500),
     },
     data() {
