@@ -7,16 +7,13 @@ a {
   color: #87c0ff;
 }
 
-tr.is-info a {
-  color: #154274;
-}
-
 tr.is-info:hover,
 a:hover {
   color: #154274;
 }
 
-tr.is-info td {
+tr.is-info td,
+tr.is-info a {
   color: #363636;
 }
 
