@@ -66,40 +66,33 @@
 </template>
 
 <script>
-  import {debounce} from 'lodash';
+import { debounce } from 'lodash';
 
-  export default {
-    watchQuery: ['search'],
-    key: to => to.fullPath,
-    async fetch({store, params, query}) {
-      await store.dispatch('GET_ATTENDEES', query.search);
+export default {
+  watchQuery: ['search'],
+  key: to => to.fullPath,
+  async fetch({ store, params, query }) {
+    await store.dispatch('GET_ATTENDEES', query.search);
+  },
+  methods: {
+    assignEvent(row) {
+      this.$store.commit('set_attendee', {
+        id: row.id,
+        full_name: row.full_name,
+      });
+      this.$router.push({ name: 'attendees-assign' });
     },
-    methods: {
-      assignEvent(row) {
-        this.$store.commit('set_attendee', {id: row.id, full_name: row.full_name});
-        this.$router.push({name: 'attendees-assign'});
-      },
-      debounceInput: _.debounce(async function () {
-        await this.$store.dispatch('GET_ATTENDEES', this.searchString);
-        if (this.$store.getters.eventAttendees.length === 0) {
-          this.$router.push({name: 'attendees-create'});
-        }
-      }, 800),
-    },
-    data() {
-      return {
-        searchString: '',
-      };
-    },
-  };
+    debounceInput: _.debounce(async function() {
+      await this.$store.dispatch('GET_ATTENDEES', this.searchString);
+      if (this.$store.getters.eventAttendees.length === 0) {
+        this.$router.push({ name: 'attendees-create' });
+      }
+    }, 800),
+  },
+  data() {
+    return {
+      searchString: '',
+    };
+  },
+};
 </script>
-
-<style>
-tr.is-info {
-  background: #167df0;
-}
-
-tr.is-info td {
-  color: #fff;
-}
-</style>

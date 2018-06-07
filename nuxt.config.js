@@ -24,7 +24,7 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [],
+  css: [{ src: '~assets/css/style.css', lang: 'css' }],
 
   /*
   ** Plugins to load before mounting the App
@@ -59,6 +59,7 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
+    extractCSS: true,
     extend(config, ctx) {
       // Run ESLint on save
       if (ctx.isDev && ctx.isClient) {

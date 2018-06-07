@@ -1,0 +1,28 @@
+tr.is-info,
+.button.is-link {
+  background: #87c0ff;
+}
+
+tr.is-info td {
+  color: #fff;
+}
+
+a {
+  color: #87c0ff;
+}
+
+.input:focus,
+.taginput .taginput-container.is-focusable:focus,
+.input.is-focused,
+.taginput .is-focused.taginput-container.is-focusable,
+.input:active,
+.taginput .taginput-container.is-focusable:active,
+.input.is-active,
+.taginput .is-active.taginput-container.is-focusable,
+.textarea:focus,
+.textarea.is-focused,
+.textarea:active,
+.textarea.is-active {
+  border-color: #87c0ff;
+  box-shadow: none;
+}
