@@ -84,7 +84,7 @@
         if (this.$store.getters.eventAttendees.length === 0) {
           this.$router.push({name: 'attendees-create'});
         }
-      }, 500),
+      }, 800),
     },
     data() {
       return {
@@ -95,11 +95,11 @@
 </script>
 
 <style>
-  tr.is-info {
-    background: #167df0;
-  }
+tr.is-info {
+  background: #167df0;
+}
 
-  tr.is-info td {
-    color: #fff;
-  }
+tr.is-info td {
+  color: #fff;
+}
 </style>
