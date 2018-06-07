@@ -11,6 +11,10 @@ a {
   color: #87c0ff;
 }
 
+tr.is-info a {
+  color: #7957d5;
+}
+
 .input:focus,
 .taginput .taginput-container.is-focusable:focus,
 .input.is-focused,
