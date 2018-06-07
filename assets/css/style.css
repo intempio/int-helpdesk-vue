@@ -12,7 +12,7 @@ tr.is-info a {
   color: #154274;
 }
 
-tr.is-info:hover {
+tr.is-info a:hover {
   text-decoration: underline;
 }
 
