@@ -3,16 +3,18 @@ tr.is-info,
   background: #87c0ff;
 }
 
-tr.is-info td {
-  color: #fff;
-}
-
 a {
   color: #87c0ff;
 }
 
 tr.is-info a {
   color: #7957d5;
+}
+
+tr.is-info:hover,
+tr.is-info td,
+a:hover {
+  color: #154274;
 }
 
 .input:focus,
@@ -29,4 +31,9 @@ tr.is-info a {
 .textarea.is-active {
   border-color: #87c0ff;
   box-shadow: none;
+}
+
+.button.is-link:hover,
+.button.is-link.is-hovered {
+  background: #154274;
 }
