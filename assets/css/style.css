@@ -5,10 +5,12 @@ tr.is-info,
 
 a {
   color: #87c0ff;
+  cursor: pointer;
 }
 
 tr.is-info a {
   color: #154274;
+  text-decoration: underline;
 }
 
 tr.is-info:hover,
