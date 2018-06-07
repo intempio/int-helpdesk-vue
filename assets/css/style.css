@@ -12,9 +12,12 @@ tr.is-info a {
 }
 
 tr.is-info:hover,
-tr.is-info td,
 a:hover {
   color: #154274;
+}
+
+tr.is-info td {
+  color: #363636;
 }
 
 .input:focus,
