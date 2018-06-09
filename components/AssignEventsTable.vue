@@ -4,7 +4,6 @@
     <div class="columns">
       <b-table html
                :data="$store.state.events"
-               :loading="$store.state.loading"
                :row-class="(row) => row.event && row.event.is_today && 'is-info'"
                style="width: 100%"
       >
@@ -32,23 +31,12 @@
 
 <script>
   export default {
-    async fetch({store}) {
-      if (store.state.events.length === 0) {
-        await store.dispatch('GET_EVENTS');
-      }
-    },
-    data() {
-      return {
-        loading: false,
-      };
-    },
+    name: "AssignEventsTable",
     methods: {
       createEventAttendee(row) {
         this.$store.dispatch('CREATE_EVENT_ATTENDEE', row.id);
       },
     },
-  };
+  }
 </script>
 
-<style scoped>
-</style>
