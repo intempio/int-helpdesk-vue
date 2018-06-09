@@ -35,14 +35,14 @@ const createStore = () => {
         const response = await this.$axios.$get('attendees/no_events/');
         commit('set_attendees_without_events', response.results);
       },
-      async CREATE_EVENT_ATTENDEE({state, commit}, {eventId, attendeeId}) {
-        commit('set_loading');
+      async CREATE_EVENT_ATTENDEE({state, commit, dispatch}, {eventId, attendeeId}) {
         await this.$axios
-          .post('event-attendees/', {
+          .$post('event-attendees/', {
             event: eventId,
             attendee: attendeeId,
           });
-        commit('set_loading');
+        dispatch('GET_ATTENDEES');
+        dispatch('GET_EVENTS');
         // this.$router.push({
         //   name: 'attendees-id',
         //   params: {id: state.currentAttendee.id},

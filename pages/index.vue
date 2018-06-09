@@ -90,7 +90,7 @@
       eventAttendees() {
         const filteredAttendee = this.$store.state.attendees.filter(attendee => {
           const lowerCaseFullName = attendee.full_name.toLowerCase();
-          return lowerCaseFullName.includes(this.searchString);
+          return lowerCaseFullName.includes(this.searchString.toLowerCase());
         });
 
         let results = [];
