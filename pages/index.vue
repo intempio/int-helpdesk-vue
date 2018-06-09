@@ -2,7 +2,7 @@
   <section class="section">
     <div class="columns is-mobile">
       <div class="column is-half is-offset-one-quarter">
-        <div>
+        <div v-if="!showCreate">
           <b-field>
             <b-input placeholder="Search..."
                      type="search"
@@ -11,6 +11,21 @@
                      id="search"
                      v-model="searchString"
             >
+            </b-input>
+          </b-field>
+        </div>
+        <div v-else>
+          <b-field label="First Name">
+            <b-input v-model="newAttendee.firstName"></b-input>
+          </b-field>
+
+          <b-field label="Last Name">
+            <b-input v-model="newAttendee.lastName"></b-input>
+          </b-field>
+
+          <b-field label="Email">
+            <b-input type="email"
+                     v-model="newAttendee.email">
             </b-input>
           </b-field>
         </div>
@@ -77,16 +92,27 @@
       <AssignEventsTable v-show="showAssign" class="section" :selected="selected"/>
     </div>
 
-    <div v-if="searchString && eventAttendees.length === 0">No Results</div>
+    <CreateEventsTable :attendee="newAttendee" v-show="showCreate" class="section"/>
+
+    <div class="columns is-mobile" v-if="searchString && eventAttendees.length === 0 && !showCreate"
+         style="margin-top: 200px">
+      <div class="column is-half is-offset-one-quarter has-text-centered">
+        <div class="title">No results ...</div>
+        <button class="button field is-primary is-large" @click="showCreate = true">
+          Create and assign event
+        </button>
+      </div>
+    </div>
   </section>
 </template>
 
 <script>
   import {uniqBy} from 'lodash';
   import AssignEventsTable from '../components/AssignEventsTable'
+  import CreateEventsTable from '../components/CreateEventsTable'
 
   export default {
-    components: {AssignEventsTable},
+    components: {AssignEventsTable, CreateEventsTable},
     computed: {
       eventAttendees() {
         const filteredAttendee = this.$store.state.attendees.filter(attendee => {
@@ -98,7 +124,7 @@
         for (const attendee of filteredAttendee) {
           if (attendee.event_attendee.length === 0) {
             results.push({
-              id: attendee.id,
+              attendee: attendee.id,
               full_name: attendee.full_name,
             });
           }
@@ -138,6 +164,12 @@
         selected: {id: '', full_name: ''},
         searchString: '',
         showAssign: false,
+        showCreate: false,
+        newAttendee: {
+          firstName: '',
+          lastName: '',
+          email: '',
+        }
       };
     },
   };

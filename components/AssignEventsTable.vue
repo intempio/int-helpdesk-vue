@@ -1,7 +1,7 @@
 <template>
   <section>
     <div class="title" id="assign-event">
-      <template v-if="selected.id">
+      <template v-if="selected.attendee">
         Assign Event for {{selected.full_name}}
       </template>
       <template v-else>
@@ -28,7 +28,7 @@
 
 
           <b-table-column label="Assign">
-            <a class="button is-small is-link" @click="confirm(props.row)" v-if="selected.id">
+            <a class="button is-small is-link" @click="confirm(props.row)" v-if="selected.attendee">
               Assign Event
             </a>
           </b-table-column>
@@ -53,12 +53,14 @@
         })
       },
       async createEventAttendee(row) {
+        console.log(this.selected);
+        console.log(row);
         await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
           eventId: row.id,
           attendeeId: this.selected.attendee
         });
 
-        this.$toast.open(`Assigned ${this.selected.full_name} to ${row.event_name}.`)
+        this.$toast.open(`Assigned ${this.selected.full_name} to ${row.event_name}.`);
         this.$scrollTo('#search');
       },
     },
