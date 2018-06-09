@@ -9,7 +9,6 @@
                      size="is-large"
                      icon="magnify"
                      v-model="searchString"
-                     v-on:input="debounceInput"
             >
             </b-input>
           </b-field>
@@ -19,7 +18,7 @@
 
     <div class="columns">
       <b-table html
-               :data="$store.getters.eventAttendees"
+               :data="eventAttendees"
                :loading="$store.state.loading"
                :row-class="(row) => row.event && row.event.is_today && 'is-info'"
                style="width: 100%"
@@ -66,33 +65,45 @@
 </template>
 
 <script>
-import { debounce } from 'lodash';
+  import {uniqBy} from 'lodash';
 
-export default {
-  watchQuery: ['search'],
-  key: to => to.fullPath,
-  async fetch({ store, params, query }) {
-    await store.dispatch('GET_ATTENDEES', query.search);
-  },
-  methods: {
-    assignEvent(row) {
-      this.$store.commit('set_attendee', {
-        id: row.id,
-        full_name: row.full_name,
-      });
-      this.$router.push({ name: 'attendees-assign' });
-    },
-    debounceInput: _.debounce(async function() {
-      await this.$store.dispatch('GET_ATTENDEES', this.searchString);
-      if (this.$store.getters.eventAttendees.length === 0) {
-        this.$router.push({ name: 'attendees-create' });
+  export default {
+    computed: {
+      eventAttendees() {
+        let results = [];
+        for (const attendee of this.$store.state.attendees) {
+          if (attendee.event_attendee.length === 0) {
+            results.push({
+              id: attendee.id,
+              full_name: attendee.full_name,
+            });
+          }
+          for (const event_attendee of attendee.event_attendee) {
+            results.push(
+              Object.assign(event_attendee, {
+                full_name: attendee.full_name,
+              })
+            );
+          }
+          results = uniqBy(results, 'id');
+        }
+        return results.filter(attendee => {
+          const lowerCaseFullName = attendee.full_name.toLowerCase();
+          return lowerCaseFullName.includes(this.searchString);
+        });
       }
-    }, 800),
-  },
-  data() {
-    return {
-      searchString: '',
-    };
-  },
-};
+    },
+    methods: {
+      assignEvent(row) {
+        this.$store.commit('set_attendee', {id: row.id, full_name: row.full_name,});
+        this.$router.push({name: 'attendees-assign'});
+      },
+    },
+    data() {
+      return {
+        searchString: '',
+        data: []
+      };
+    },
+  };
 </script>

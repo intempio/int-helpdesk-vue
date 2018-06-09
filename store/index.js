@@ -1,12 +1,10 @@
 import Vuex from 'vuex';
-import {uniqBy} from 'lodash';
 
 const createStore = () => {
   return new Vuex.Store({
     state: {
       attendees: [],
       events: [],
-      event_attendees: [],
       attendees_without_events: [],
       currentAttendee: {
         id: '',
@@ -23,9 +21,6 @@ const createStore = () => {
       },
       set_events(state, events) {
         state.events = events;
-      },
-      set_event_attendees(state, event_attendees) {
-        state.event_attendees = event_attendees
       },
       set_attendee(state, {id, full_name}) {
         state.currentAttendee.id = id;
@@ -61,36 +56,12 @@ const createStore = () => {
           params: {id: state.currentAttendee.id},
         });
       },
-      nuxtClientInit({commit, dispatch}) {
+      nuxtClientInit({dispatch}) {
         dispatch('GET_ATTENDEES');
         dispatch('GET_EVENTS');
         dispatch('GET_ATTENDEES_WITHOUT_EVENTS');
       }
-    },
-    getters: {
-      eventAttendees: state => {
-        let results = [];
-        if (state.attendees.length !== 0) {
-          for (const attendee of state.attendees) {
-            if (attendee.event_attendee.length === 0) {
-              results.push({
-                id: attendee.id,
-                full_name: attendee.full_name,
-              });
-            }
-            for (const event_attendee of attendee.event_attendee) {
-              results.push(
-                Object.assign(event_attendee, {
-                  full_name: attendee.full_name,
-                })
-              );
-            }
-          }
-          results = uniqBy(results, 'id');
-        }
-        return results;
-      },
-    },
+    }
   });
 };
 
