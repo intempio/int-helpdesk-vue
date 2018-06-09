@@ -45,3 +45,5 @@ tr.is-info td {
 .button.is-link.is-hovered {
   background: #154274;
 }
+
+table:focus { outline: none; }

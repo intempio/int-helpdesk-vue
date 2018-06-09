@@ -36,7 +36,7 @@
           <b-table-column field="event.event_name" label="Event Name">
             <div v-if="!props.row.event">
               not assigned to any current or future events
-              <a class="button is-small is-link" @click="assignEvent" v-scroll-to="'#assign-event'">
+              <a class="button is-small is-link" v-scroll-to="'#assign-event'">
                 Assign Event
               </a>
             </div>
@@ -63,14 +63,16 @@
             {{ props.row.call_complete ? 'Yes': 'No'}}
           </b-table-column>
         </template>
+
+        <template slot="bottom-left">
+          <button class="button field is-primary is-small" @click="selected = null"
+                  v-show="selected">
+            <b-icon icon="close"></b-icon>
+            <span>Clear selected</span>
+          </button>
+        </template>
       </b-table>
-      <div style="margin-top: 20px">
-        <button class="button field is-primary is-small" @click="selected = null"
-                v-show="selected">
-          <b-icon icon="close"></b-icon>
-          <span>Clear selected</span>
-        </button>
-      </div>
+
       <AssignEventsTable v-show="showAssign" class="section"/>
     </div>
 
