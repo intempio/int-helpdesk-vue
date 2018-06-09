@@ -59,6 +59,7 @@
         });
 
         this.$toast.open(`Assigned ${this.selected.full_name} to ${row.event_name}.`)
+        this.$scrollTo('#search');
       },
     },
   }

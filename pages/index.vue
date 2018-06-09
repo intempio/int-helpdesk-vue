@@ -8,6 +8,7 @@
                      type="search"
                      size="is-large"
                      icon="magnify"
+                     id="search"
                      v-model="searchString"
             >
             </b-input>
