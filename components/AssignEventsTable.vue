@@ -1,6 +1,6 @@
 <template>
-  <section class="section">
-    <div class="title" id="assign-event">Assign Event {{$store.state.currentAttendee.full_name}}</div>
+  <section>
+    <div class="title" id="assign-event">Assign Event {{$store.state.currentAttendee.full_name}} for {{selected.full_name}} </div>
     <div class="columns">
       <b-table html
                :data="$store.state.events"
@@ -10,7 +10,7 @@
                style="width: 100%"
       >
 
-        <template scope="props">
+        <template slot-scope="props">
           <b-table-column field="event_name" label="Event Name">
             {{ props.row.event_name }}
           </b-table-column>
@@ -21,9 +21,10 @@
 
 
           <b-table-column label="Assign">
-            <a class="button is-small is-link" @click="createEventAttendee(props.row)">
+            <a class="button is-small is-link" @click="createEventAttendee(props.row)" v-if="selected.id">
               Assign Event
             </a>
+            <div v-else>Select event first</div>
           </b-table-column>
         </template>
       </b-table>
@@ -33,6 +34,9 @@
 
 <script>
   export default {
+    props: {
+      selected: Object
+    },
     name: "AssignEventsTable",
     methods: {
       createEventAttendee(row) {

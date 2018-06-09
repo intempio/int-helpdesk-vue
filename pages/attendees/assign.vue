@@ -9,7 +9,7 @@
                style="width: 100%"
       >
 
-        <template scope="props">
+        <template slot-scope="props">
           <b-table-column field="event_name" label="Event Name">
             {{ props.row.event_name }}
           </b-table-column>

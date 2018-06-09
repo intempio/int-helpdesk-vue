@@ -5,7 +5,7 @@
         <div class="column">
           <h4 class="title">{{full_name}} - {{email}}</h4>
           <b-table :data="event_attendee">
-            <template scope="props">
+            <template slot-scope="props">
               <b-table-column field="event_name" label="Event Name">
                 {{ props.row.event.event_name }}
               </b-table-column>

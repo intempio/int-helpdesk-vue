@@ -28,7 +28,7 @@
                style="width: 100%"
       >
 
-        <template scope="props">
+        <template slot-scope="props">
           <b-table-column field="full_name" label="Full Name">
             {{ props.row.full_name }}
           </b-table-column>
@@ -36,7 +36,7 @@
           <b-table-column field="event.event_name" label="Event Name">
             <div v-if="!props.row.event">
               not assigned to any current or future events
-              <a class="button is-small is-link" v-scroll-to="'#assign-event'">
+              <a class="button is-small is-link" @click="assignEvent">
                 Assign Event
               </a>
             </div>
@@ -65,7 +65,7 @@
         </template>
 
         <template slot="bottom-left">
-          <button class="button field is-primary is-small" @click="selected = null"
+          <button class="button field is-primary is-small" @click="selected = {id: '', fullName: ''}"
                   v-show="selected">
             <b-icon icon="close"></b-icon>
             <span>Clear selected</span>
@@ -73,7 +73,7 @@
         </template>
       </b-table>
 
-      <AssignEventsTable v-show="showAssign" class="section"/>
+      <AssignEventsTable v-show="showAssign" class="section" :selected="selected"/>
     </div>
 
     <div v-if="searchString && eventAttendees.length === 0">No Results</div>
@@ -118,20 +118,24 @@
       assignEvent(row) {
         // this.$store.commit('set_attendee', {id: row.id, full_name: row.full_name,});
         // this.$router.push({name: 'attendees-assign'});
+        this.showAssign = true;
+        this.$scrollTo('#assign-event');
+
       },
       selectRow(row) {
         this.selected = row;
+        // this.$scrollTo('#assign-event');
       }
     },
     watch: {
       searchString() {
-        this.selected = null;
+        this.selected = {id: '', fullName: ''};
         this.showAssign = !!this.searchString;
       }
     },
     data() {
       return {
-        selected: null,
+        selected: {id: ''},
         searchString: '',
         showAssign: false,
       };
