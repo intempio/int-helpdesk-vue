@@ -16,7 +16,8 @@
     "@nuxtjs/axios": "^5.0.0",
     "lodash": "^4.17.10",
     "nuxt": "^1.0.0",
-    "nuxt-buefy": "^0.0.4"
+    "nuxt-buefy": "^0.0.4",
+    "vue-scrollto": "^2.11.0"
   },
   "devDependencies": {
     "cross-env": "^5.0.1",

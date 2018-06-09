@@ -59,7 +59,7 @@ const createStore = () => {
       nuxtClientInit({dispatch}) {
         dispatch('GET_ATTENDEES');
         dispatch('GET_EVENTS');
-        dispatch('GET_ATTENDEES_WITHOUT_EVENTS');
+        // dispatch('GET_ATTENDEES_WITHOUT_EVENTS');
       }
     }
   });

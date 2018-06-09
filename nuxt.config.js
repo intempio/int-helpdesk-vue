@@ -30,7 +30,8 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    { src: '~/plugins/nuxt-client-init.js', ssr: false }
+    { src: '~/plugins/nuxt-client-init.js', ssr: false },
+    '~plugins/vue-scrollto.js'
   ],
 
   /*

@@ -1,9 +1,11 @@
 <template>
   <section class="section">
-    <div class="title">Assign Event {{$store.state.currentAttendee.full_name}}</div>
+    <div class="title" id="assign-event">Assign Event {{$store.state.currentAttendee.full_name}}</div>
     <div class="columns">
       <b-table html
                :data="$store.state.events"
+               :paginated="true"
+               :per-page="15"
                :row-class="(row) => row.event && row.event.is_today && 'is-info'"
                style="width: 100%"
       >
