@@ -135,7 +135,7 @@
     },
     data() {
       return {
-        selected: {id: ''},
+        selected: {id: '', full_name: ''},
         searchString: '',
         showAssign: false,
       };

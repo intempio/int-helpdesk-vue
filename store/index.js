@@ -6,10 +6,6 @@ const createStore = () => {
       attendees: [],
       events: [],
       attendees_without_events: [],
-      currentAttendee: {
-        id: '',
-        full_name: ''
-      },
       loading: false,
     },
     mutations: {
@@ -21,10 +17,6 @@ const createStore = () => {
       },
       set_events(state, events) {
         state.events = events;
-      },
-      set_attendee(state, {id, full_name}) {
-        state.currentAttendee.id = id;
-        state.currentAttendee.full_name = full_name;
       },
       set_loading(state) {
         state.loading = !state.loading
@@ -43,18 +35,18 @@ const createStore = () => {
         const response = await this.$axios.$get('attendees/no_events/');
         commit('set_attendees_without_events', response.results);
       },
-      async CREATE_EVENT_ATTENDEE({state, commit}, eventId) {
+      async CREATE_EVENT_ATTENDEE({state, commit}, {eventId, attendeeId}) {
         commit('set_loading');
         await this.$axios
           .post('event-attendees/', {
             event: eventId,
-            attendee: state.currentAttendee.id,
+            attendee: attendeeId,
           });
         commit('set_loading');
-        this.$router.push({
-          name: 'attendees-id',
-          params: {id: state.currentAttendee.id},
-        });
+        // this.$router.push({
+        //   name: 'attendees-id',
+        //   params: {id: state.currentAttendee.id},
+        // });
       },
       nuxtClientInit({dispatch}) {
         dispatch('GET_ATTENDEES');

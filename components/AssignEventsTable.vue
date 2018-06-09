@@ -1,6 +1,6 @@
 <template>
   <section>
-    <div class="title" id="assign-event">Assign Event {{$store.state.currentAttendee.full_name}} for {{selected.full_name}} </div>
+    <div class="title" id="assign-event">Assign Event for {{selected.full_name}}</div>
     <div class="columns">
       <b-table html
                :data="$store.state.events"
@@ -40,7 +40,11 @@
     name: "AssignEventsTable",
     methods: {
       createEventAttendee(row) {
-        this.$store.dispatch('CREATE_EVENT_ATTENDEE', row.id);
+        this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
+          eventId: row.id,
+          attendeeId: this.selected.id
+        });
+
       },
     },
   }
