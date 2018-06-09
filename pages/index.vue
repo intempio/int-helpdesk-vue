@@ -40,7 +40,6 @@
                :selected="selected"
                :paginated="true"
                :per-page="20"
-               focusable
                style="width: 100%"
       >
 
@@ -114,6 +113,9 @@
   export default {
     components: {AssignEventsTable, CreateEventsTable},
     computed: {
+      isFocusable() {
+        return this.searchString.trim().length !== 0 ;
+      },
       eventAttendees() {
         const filteredAttendee = this.$store.state.attendees.filter(attendee => {
           const lowerCaseFullName = attendee.full_name.toLowerCase();
@@ -144,7 +146,6 @@
       assignEvent(row) {
         this.showAssign = true;
         this.$scrollTo('#assign-event');
-        this.searchString = row.full_name;
       },
       selectRow(row) {
         this.selected = row;
