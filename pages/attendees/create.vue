@@ -43,11 +43,11 @@
 
 <script>
   export default {
-    async fetch({store}) {
-      if (store.state.events.length === 0) {
-        await store.dispatch('GET_EVENTS');
-      }
-    },
+    // async fetch({store}) {
+    //   if (store.state.events.length === 0) {
+    //     await store.dispatch('GET_EVENTS');
+    //   }
+    // },
     methods: {
       async createEventAttendee(row) {
         if (this.firstName.trim() && this.lastName.trim() && this.email.trim()) {

@@ -6,6 +6,8 @@ const createStore = () => {
     state: {
       attendees: [],
       events: [],
+      event_attendees: [],
+      attendees_without_events: [],
       currentAttendee: {
         id: '',
         full_name: ''
@@ -16,8 +18,14 @@ const createStore = () => {
       set_attendees(state, attendees) {
         state.attendees = attendees;
       },
+      set_attendees_without_events(state, attendees) {
+        state.attendees_without_events = attendees;
+      },
       set_events(state, events) {
         state.events = events;
+      },
+      set_event_attendees(state, event_attendees) {
+        state.event_attendees = event_attendees
       },
       set_attendee(state, {id, full_name}) {
         state.currentAttendee.id = id;
@@ -28,19 +36,17 @@ const createStore = () => {
       }
     },
     actions: {
-      async GET_ATTENDEES({commit}, searchString = '') {
-        commit('set_loading');
-        const response = await this.$axios.$get('attendees/recent/', {
-          params: {search: searchString},
-        });
+      async GET_ATTENDEES({commit}) {
+        const response = await this.$axios.$get('attendees/recent/');
         commit('set_attendees', response.results);
-        commit('set_loading');
       },
       async GET_EVENTS({commit}) {
-        commit('set_loading');
         const response = await this.$axios.$get('events/');
         commit('set_events', response.results);
-        commit('set_loading');
+      },
+      async GET_ATTENDEES_WITHOUT_EVENTS({commit}) {
+        const response = await this.$axios.$get('attendees/no_events/');
+        commit('set_attendees_without_events', response.results);
       },
       async CREATE_EVENT_ATTENDEE({state, commit}, eventId) {
         commit('set_loading');
@@ -55,6 +61,11 @@ const createStore = () => {
           params: {id: state.currentAttendee.id},
         });
       },
+      nuxtClientInit({commit, dispatch}) {
+        dispatch('GET_ATTENDEES');
+        dispatch('GET_EVENTS');
+        dispatch('GET_ATTENDEES_WITHOUT_EVENTS');
+      }
     },
     getters: {
       eventAttendees: state => {
