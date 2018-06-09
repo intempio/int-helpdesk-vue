@@ -1,6 +1,13 @@
 <template>
   <section>
-    <div class="title" id="assign-event">Assign Event for {{selected.full_name}}</div>
+    <div class="title" id="assign-event">
+      <template v-if="selected.id">
+        Assign Event for {{selected.full_name}}
+      </template>
+      <template v-else>
+        Select Attendee
+      </template>
+    </div>
     <div class="columns">
       <b-table html
                :data="$store.state.events"
@@ -24,7 +31,6 @@
             <a class="button is-small is-link" @click="createEventAttendee(props.row)" v-if="selected.id">
               Assign Event
             </a>
-            <div v-else>Select event first</div>
           </b-table-column>
         </template>
       </b-table>
