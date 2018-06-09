@@ -66,7 +66,7 @@
 
         <template slot="bottom-left">
           <button class="button field is-primary is-small" @click="selected = {id: '', fullName: ''}"
-                  v-show="selected">
+                  v-show="selected.id">
             <b-icon icon="close"></b-icon>
             <span>Clear selected</span>
           </button>
