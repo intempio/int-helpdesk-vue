@@ -39,7 +39,7 @@
                @select="selectRow"
                :selected="selected"
                :paginated="true"
-               :per-page="15"
+               :per-page="20"
                focusable
                style="width: 100%"
       >
@@ -52,7 +52,7 @@
           <b-table-column field="event.event_name" label="Event Name">
             <div v-if="!props.row.event">
               not assigned to any current or future events
-              <a class="button is-small is-link" @click="assignEvent">
+              <a class="button is-small is-link" @click="assignEvent(props.row)">
                 Assign Event
               </a>
             </div>
@@ -142,15 +142,12 @@
     },
     methods: {
       assignEvent(row) {
-        // this.$store.commit('set_attendee', {id: row.id, full_name: row.full_name,});
-        // this.$router.push({name: 'attendees-assign'});
         this.showAssign = true;
         this.$scrollTo('#assign-event');
-
+        this.searchString = row.full_name;
       },
       selectRow(row) {
         this.selected = row;
-        // this.$scrollTo('#assign-event');
       }
     },
     watch: {
