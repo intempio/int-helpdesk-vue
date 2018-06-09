@@ -28,7 +28,7 @@
 
 
           <b-table-column label="Assign">
-            <a class="button is-small is-link" @click="createEventAttendee(props.row)" v-if="selected.id">
+            <a class="button is-small is-link" @click="confirm(props.row)" v-if="selected.id">
               Assign Event
             </a>
           </b-table-column>
@@ -45,12 +45,19 @@
     },
     name: "AssignEventsTable",
     methods: {
-      createEventAttendee(row) {
-        this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
+      confirm(row) {
+        this.$dialog.confirm({
+          message: `Assign <strong>${this.selected.full_name}</strong> to <strong>${row.event_name}</strong>?`,
+          onConfirm: () => this.createEventAttendee(row),
+          confirmText: 'Confirm'
+        })
+      },
+      async createEventAttendee(row) {
+        await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
           eventId: row.id,
           attendeeId: this.selected.id
         });
-
+        this.$toast.open(`Assigned ${this.selected.full_name} to ${row.event_name}.`)
       },
     },
   }
