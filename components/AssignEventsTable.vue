@@ -55,8 +55,9 @@
       async createEventAttendee(row) {
         await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
           eventId: row.id,
-          attendeeId: this.selected.id
+          attendeeId: this.selected.attendee
         });
+
         this.$toast.open(`Assigned ${this.selected.full_name} to ${row.event_name}.`)
       },
     },

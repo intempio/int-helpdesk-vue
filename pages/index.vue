@@ -110,7 +110,6 @@
           }
           results = uniqBy(results, 'id');
         }
-
         return results;
       }
     },
