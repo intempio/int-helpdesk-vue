@@ -19,7 +19,6 @@
     <div class="columns">
       <b-table html
                :data="eventAttendees"
-               :loading="$store.state.loading"
                :row-class="(row) => row.event && row.event.is_today && 'is-info'"
                style="width: 100%"
       >
@@ -102,7 +101,6 @@
     data() {
       return {
         searchString: '',
-        data: []
       };
     },
   };
