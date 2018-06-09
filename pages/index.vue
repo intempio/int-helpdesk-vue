@@ -69,8 +69,13 @@
   export default {
     computed: {
       eventAttendees() {
+        const filteredAttendee = this.$store.state.attendees.filter(attendee => {
+          const lowerCaseFullName = attendee.full_name.toLowerCase();
+          return lowerCaseFullName.includes(this.searchString);
+        });
+
         let results = [];
-        for (const attendee of this.$store.state.attendees) {
+        for (const attendee of filteredAttendee) {
           if (attendee.event_attendee.length === 0) {
             results.push({
               id: attendee.id,
@@ -86,10 +91,8 @@
           }
           results = uniqBy(results, 'id');
         }
-        return results.filter(attendee => {
-          const lowerCaseFullName = attendee.full_name.toLowerCase();
-          return lowerCaseFullName.includes(this.searchString);
-        });
+
+        return results
       }
     },
     methods: {
