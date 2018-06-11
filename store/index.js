@@ -43,15 +43,12 @@ const createStore = () => {
           });
         dispatch('GET_ATTENDEES');
         dispatch('GET_EVENTS');
-        // this.$router.push({
-        //   name: 'attendees-id',
-        //   params: {id: state.currentAttendee.id},
-        // });
       },
-      nuxtClientInit({dispatch}) {
+      nuxtClientInit({dispatch, commit}) {
+        commit('set_loading');
         dispatch('GET_ATTENDEES');
         dispatch('GET_EVENTS');
-        // dispatch('GET_ATTENDEES_WITHOUT_EVENTS');
+        commit('set_loading');
       }
     }
   });
