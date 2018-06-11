@@ -81,7 +81,7 @@
           confirmText: 'Confirm'
         })
       },
-      createEventAttendee(row) {
+       createEventAttendee(row) {
         this.$axios.$post('/attendees/', {
           first_name: this.attendee.firstName,
           last_name: this.attendee.lastName,
@@ -91,9 +91,10 @@
             attendee: created_attendee.id,
             event: row.id
           });
-        }).then(() => {
+        }).then(async () => {
           this.$toast.open(`Assigned ${this.attendee.firstName} ${this.attendee.lastName} to ${row.event_name}.`);
-          this.$router.push('/');
+          await this.$store.dispatch('nuxtClientInit');
+          this.$router.push({name: 'index', query: {search: `${this.attendee.firstName} ${this.attendee.lastName}`}});
         }).catch((error) => {
           // Error
           if (error.response) {

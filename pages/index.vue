@@ -92,14 +92,15 @@
 <script>
   import {uniqBy} from 'lodash';
   import AssignEventsTable from '../components/AssignEventsTable'
-  import CreateEventsTable from '../components/CreateEventsTable'
 
   export default {
-    components: {AssignEventsTable, CreateEventsTable},
+    components: {AssignEventsTable},
+    watchQuery: ['search'],
+    key: to => to.fullPath,
+    async asyncData({query}) {
+      return {query};
+    },
     computed: {
-      isFocusable() {
-        return this.searchString.trim().length !== 0;
-      },
       eventAttendees() {
         const filteredAttendee = this.$store.state.attendees.filter(attendee => {
           const lowerCaseFullName = attendee.full_name.toLowerCase();
@@ -125,6 +126,10 @@
         }
         return results;
       }
+    },
+    created() {
+      console.log(this.query);
+      this.searchString = this.query.search || '';
     },
     methods: {
       assignEvent(row) {
