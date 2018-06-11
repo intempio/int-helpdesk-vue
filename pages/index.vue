@@ -25,7 +25,6 @@
                :selected="selected"
                :paginated="true"
                :per-page="20"
-               :loading="$store.state.loading"
                style="width: 100%"
       >
 

@@ -39,15 +39,13 @@ const createStore = () => {
             event: eventId,
             attendee: attendeeId,
           });
-        dispatch('GET_ATTENDEES');
-        dispatch('GET_EVENTS');
+
+        dispatch('nuxtClientInit');
       },
       async nuxtClientInit({dispatch, commit}) {
-        commit('set_loading');
         const [attendees, events] = await Promise.all([dispatch('GET_ATTENDEES'), dispatch('GET_EVENTS')]);
         commit('set_attendees', attendees.results);
         commit('set_events', events.results);
-        commit('set_loading');
       }
     }
   });
