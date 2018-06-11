@@ -8,7 +8,6 @@
                      type="search"
                      size="is-large"
                      icon="magnify"
-                     loading="$store.state.loading"
                      id="search"
                      v-model="searchString"
             >
@@ -26,6 +25,7 @@
                :selected="selected"
                :paginated="true"
                :per-page="20"
+               loading="$store.state.loading"
                style="width: 100%"
       >
 
