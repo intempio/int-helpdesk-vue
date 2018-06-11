@@ -24,7 +24,7 @@
                @select="selectRow"
                :selected="selected"
                :paginated="true"
-               :per-page="20"
+               :per-page="15"
                style="width: 100%"
       >
 
@@ -62,18 +62,22 @@
           <b-table-column field="call_complete" label="Call Complete">
             {{ props.row.call_complete ? 'Yes': 'No'}}
           </b-table-column>
+
+          <b-table-column field="" label="Actions">
+           <button class="button field is-small" @click="addComment">Add comment</button>
+          </b-table-column>
         </template>
 
         <template slot="bottom-left">
           <button class="button field is-primary is-small" @click="selected = {id: '', fullName: ''}"
-                  v-show="selected.id">
+                  v-show="selected && selected.attendee">
             <b-icon icon="close"></b-icon>
             <span>Clear selected</span>
           </button>
         </template>
       </b-table>
 
-      <AssignEventsTable v-show="showAssign" class="section" :selected="selected"/>
+      <AssignEventsTable v-if="selected && selected.attendee" class="section" :selected="selected"/>
     </div>
 
 
@@ -128,12 +132,14 @@
       }
     },
     created() {
-      console.log(this.query);
       this.searchString = this.query.search || '';
     },
     methods: {
+      addComment() {
+        alert('add comment');
+      },
       assignEvent(row) {
-        this.showAssign = true;
+        this.selected = row;
         this.$scrollTo('#assign-event');
       },
       selectRow(row) {
@@ -143,14 +149,12 @@
     watch: {
       searchString() {
         this.selected = {id: '', fullName: ''};
-        this.showAssign = !!this.searchString;
       }
     },
     data() {
       return {
-        selected: {id: '', full_name: ''},
+        selected: null,
         searchString: '',
-        showAssign: false
       };
     },
   };
