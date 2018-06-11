@@ -56,19 +56,39 @@
           confirmText: 'Confirm'
         })
       },
-      async createAttendee() {
-      },
-      async createEventAttendee(row) {
-        // console.log(this.selected);
-        // console.log(row);
-        // await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
-        //   eventId: row.id,
-        //   attendeeId: this.fullName.attendee
-        // });
-        //
-        // this.$toast.open(`Assigned ${this.selected.full_name} to ${row.event_name}.`);
-        // this.$scrollTo('#search');
-
+      createEventAttendee(row) {
+        this.$axios.$post('/attendees/', {
+          first_name: this.attendee.firstName,
+          last_name: this.attendee.lastName,
+          email: this.attendee.email
+        }).then(created_attendee => {
+          return this.$axios.$post('/event-attendees/', {
+            attendee: created_attendee.id,
+            event: row.id
+          });
+        }).then(() => {
+          this.$toast.open(`Assigned ${this.attendee.firstName} ${this.attendee.lastName} to ${row.event_name}.`);
+          this.$router.replace({name: 'index'});
+        }).catch((error) => {
+          // Error
+          if (error.response) {
+            // The request was made and the server responded with a status code
+            // that falls out of the range of 2xx
+            const {data, status} = error.response;
+            if (status === 400) {
+              if (data['email']) {
+                this.$toast.open(`${data['email'][0]}`);
+              }
+            }
+          } else if (error.request) {
+            // The request was made but no response was received
+            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+            console.log(error.request);
+          } else {
+            // Something happened in setting up the request that triggered an Error
+            console.log('Error', error.message);
+          }
+        });
       },
     },
   }
