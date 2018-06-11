@@ -2,7 +2,7 @@
   <section class="section">
     <div class="columns is-mobile">
       <div class="column is-half is-offset-one-quarter">
-        <div v-if="!showCreate">
+        <div>
           <b-field>
             <b-input placeholder="Search..."
                      type="search"
@@ -11,21 +11,6 @@
                      id="search"
                      v-model="searchString"
             >
-            </b-input>
-          </b-field>
-        </div>
-        <div v-else>
-          <b-field label="First Name">
-            <b-input v-model="newAttendee.firstName"></b-input>
-          </b-field>
-
-          <b-field label="Last Name">
-            <b-input v-model="newAttendee.lastName"></b-input>
-          </b-field>
-
-          <b-field label="Email">
-            <b-input type="email"
-                     v-model="newAttendee.email">
             </b-input>
           </b-field>
         </div>
@@ -91,13 +76,12 @@
       <AssignEventsTable v-show="showAssign" class="section" :selected="selected"/>
     </div>
 
-    <CreateEventsTable :attendee="newAttendee" v-show="showCreate" class="section"/>
 
-    <div class="columns is-mobile" v-if="searchString && eventAttendees.length === 0 && !showCreate"
+    <div class="columns is-mobile" v-if="searchString && eventAttendees.length === 0"
          style="margin-top: 200px">
       <div class="column is-half is-offset-one-quarter has-text-centered">
         <div class="title">No results ...</div>
-        <button class="button field is-primary is-large" @click="showCreate = true">
+        <button class="button field is-primary is-large" @click="$router.push('/create/')">
           Create and assign event
         </button>
       </div>
@@ -114,7 +98,7 @@
     components: {AssignEventsTable, CreateEventsTable},
     computed: {
       isFocusable() {
-        return this.searchString.trim().length !== 0 ;
+        return this.searchString.trim().length !== 0;
       },
       eventAttendees() {
         const filteredAttendee = this.$store.state.attendees.filter(attendee => {
@@ -161,13 +145,7 @@
       return {
         selected: {id: '', full_name: ''},
         searchString: '',
-        showAssign: false,
-        showCreate: false,
-        newAttendee: {
-          firstName: '',
-          lastName: '',
-          email: '',
-        }
+        showAssign: false
       };
     },
   };
