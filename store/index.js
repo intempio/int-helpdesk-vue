@@ -23,17 +23,11 @@ const createStore = () => {
       }
     },
     actions: {
-      async GET_ATTENDEES({commit}) {
-        commit('set_loading');
-        const response = await this.$axios.$get('attendees/recent/');
-        commit('set_attendees', response.results);
-        commit('set_loading');
+      GET_ATTENDEES() {
+        return this.$axios.$get('attendees/recent/');
       },
-      async GET_EVENTS({commit}) {
-        commit('set_loading');
-        const response = await this.$axios.$get('events/');
-        commit('set_events', response.results);
-        commit('set_loading');
+      GET_EVENTS() {
+        return this.$axios.$get('events/');
       },
       async GET_ATTENDEES_WITHOUT_EVENTS({commit}) {
         const response = await this.$axios.$get('attendees/no_events/');
@@ -48,9 +42,12 @@ const createStore = () => {
         dispatch('GET_ATTENDEES');
         dispatch('GET_EVENTS');
       },
-      async nuxtClientInit({dispatch}) {
-        dispatch('GET_ATTENDEES');
-        dispatch('GET_EVENTS');
+      async nuxtClientInit({dispatch, commit}) {
+        commit('set_loading');
+        const [attendees, events] = await Promise.all([dispatch('GET_ATTENDEES'), dispatch('GET_EVENTS')]);
+        commit('set_attendees', attendees.results);
+        commit('set_events', events.results);
+        commit('set_loading');
       }
     }
   });
