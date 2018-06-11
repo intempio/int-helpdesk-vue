@@ -81,7 +81,8 @@
           confirmText: 'Confirm'
         })
       },
-       createEventAttendee(row) {
+      createEventAttendee(row) {
+        const loadingComponent = this.$loading.open();
         this.$axios.$post('/attendees/', {
           first_name: this.attendee.firstName,
           last_name: this.attendee.lastName,
@@ -94,10 +95,13 @@
         }).then(async () => {
           this.$toast.open(`Assigned ${this.attendee.firstName} ${this.attendee.lastName} to ${row.event_name}.`);
           await this.$store.dispatch('nuxtClientInit');
+          loadingComponent.close();
           this.$router.push({name: 'index', query: {search: `${this.attendee.firstName} ${this.attendee.lastName}`}});
         }).catch((error) => {
+          loadingComponent.close();
           // Error
           if (error.response) {
+
             // The request was made and the server responded with a status code
             // that falls out of the range of 2xx
             const {data, status} = error.response;

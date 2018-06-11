@@ -53,13 +53,12 @@
         })
       },
       async createEventAttendee(row) {
-        console.log(this.selected);
-        console.log(row);
+        const loadingComponent = this.$loading.open();
         await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
           eventId: row.id,
           attendeeId: this.selected.attendee
         });
-
+        loadingComponent.close();
         this.$toast.open(`Assigned ${this.selected.full_name} to ${row.event_name}.`);
         this.$scrollTo('#search');
       },
