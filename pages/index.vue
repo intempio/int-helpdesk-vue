@@ -139,9 +139,6 @@
         return results;
       }
     },
-    created() {
-      this.searchString = this.query.search || '';
-    },
     methods: {
       addComment(row) {
         this.selected = row;
@@ -165,7 +162,7 @@
     data() {
       return {
         selected: null,
-        searchString: '',
+        searchString: this.query && this.query.search || '',
         formProps: {
           comment: '',
           id: ''
