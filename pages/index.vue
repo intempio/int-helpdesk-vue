@@ -64,8 +64,11 @@
           </b-table-column>
 
           <b-table-column field="" label="Actions">
-            <button class="button field is-small" @click="addComment(props.row)">
-              {{props.row.comment ? 'Update': 'Add'}} comment
+            <button class="button field is-small" @click="addComment(props.row)" style="margin-right: 10px;">
+              Comment
+            </button>
+            <button class="button field is-small" @click="editAttendee(props.row)">
+              Edit
             </button>
           </b-table-column>
         </template>
@@ -94,8 +97,13 @@
     </div>
 
     <b-modal :active.sync="$store.state.isCommentModalActive" has-modal-card width="500">
-      <add-component-modal v-bind="formProps"></add-component-modal>
+      <add-component-modal v-bind="commentFormProps"/>
     </b-modal>
+
+    <b-modal :active.sync="$store.state.isEditAttendeeModalActive" has-modal-card width="500">
+      <edit-attendee-modal v-bind="attendeeFormProps"/>
+    </b-modal>
+
   </section>
 </template>
 
@@ -103,9 +111,10 @@
   import {uniqBy, sortBy} from 'lodash';
   import AssignEventsTable from '../components/AssignEventsTable'
   import AddComponentModal from '../components/AddComponentModal'
+  import EditAttendeeModal from '../components/EditAttendeeModal'
 
   export default {
-    components: {AssignEventsTable, AddComponentModal},
+    components: {AssignEventsTable, AddComponentModal, EditAttendeeModal},
     watchQuery: ['search'],
     key: to => to.fullPath,
     async asyncData({query}) {
@@ -123,18 +132,28 @@
             results.push({
               attendee: attendee.id,
               full_name: attendee.full_name,
+              firstName: attendee.first_name,
+              lastName: attendee.last_name,
+              email: attendee.email,
+              role: attendee.role
             });
           }
           for (const event_attendee of attendee.event_attendee) {
             results.push(
               Object.assign(event_attendee, {
                 full_name: attendee.full_name,
+                firstName: attendee.first_name,
+                lastName: attendee.last_name,
+                email: attendee.email,
+                role: attendee.role
               })
             );
           }
 
           results = uniqBy(results, 'id');
-          results = sortBy(results, [function(o) { return o.event && o.event.date; }])
+          results = sortBy(results, [function (o) {
+            return o.event && o.event.date;
+          }])
         }
         return results;
       }
@@ -142,9 +161,15 @@
     methods: {
       addComment(row) {
         this.selected = row;
-        this.formProps.comment = this.selected.comment;
-        this.formProps.id = this.selected.id;
+        const {comment, id} = this.selected;
+        Object.assign(this.commentFormProps, {id, comment});
         this.$store.commit('set_comment_modal_active');
+      },
+      editAttendee(row) {
+        this.selected = row;
+        const {attendee, firstName, lastName, email, role} = this.selected;
+        Object.assign(this.attendeeFormProps, {id: attendee, firstName, lastName, email, role});
+        this.$store.commit('set_edit_attendee_modal_active');
       },
       assignEvent(row) {
         this.selected = row;
@@ -163,9 +188,13 @@
       return {
         selected: null,
         searchString: this.query && this.query.search || '',
-        formProps: {
-          comment: '',
-          id: ''
+        commentFormProps: {comment: '', id: ''},
+        attendeeFormProps: {
+          id: '',
+          firstName: '',
+          lastName: '',
+          email: '',
+          role: ''
         }
       };
     },
