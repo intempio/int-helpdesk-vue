@@ -100,7 +100,7 @@
 </template>
 
 <script>
-  import {uniqBy} from 'lodash';
+  import {uniqBy, sortBy, sortedUniqBy} from 'lodash';
   import AssignEventsTable from '../components/AssignEventsTable'
   import AddComponentModal from '../components/AddComponentModal'
 
@@ -114,8 +114,7 @@
     computed: {
       eventAttendees() {
         const filteredAttendee = this.$store.state.attendees.filter(attendee => {
-          const lowerCaseFullName = attendee.full_name.toLowerCase();
-          return lowerCaseFullName.includes(this.searchString.toLowerCase());
+          return attendee.full_name.toLowerCase().includes(this.searchString.toLowerCase());
         });
 
         let results = [];
@@ -133,7 +132,9 @@
               })
             );
           }
+
           results = uniqBy(results, 'id');
+          results = sortBy(results, [function(o) { return o.event && o.event.date; }])
         }
         return results;
       }
