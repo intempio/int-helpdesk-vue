@@ -100,7 +100,7 @@
 </template>
 
 <script>
-  import {uniqBy, sortBy, sortedUniqBy} from 'lodash';
+  import {uniqBy, sortBy} from 'lodash';
   import AssignEventsTable from '../components/AssignEventsTable'
   import AddComponentModal from '../components/AddComponentModal'
 
