@@ -64,7 +64,7 @@
           </b-table-column>
 
           <b-table-column field="" label="Actions">
-            <button class="button field is-small is-primary" @click="addComment(props.row)">
+            <button class="button field is-small" @click="addComment(props.row)">
               {{props.row.comment ? 'Update': 'Add'}} comment
             </button>
           </b-table-column>
