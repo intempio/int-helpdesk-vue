@@ -93,7 +93,7 @@
       </div>
     </div>
 
-    <b-modal :active.sync="isComponentModalActive" has-modal-card width="500">
+    <b-modal :active.sync="$store.state.isCommentModalActive" has-modal-card width="500">
       <add-component-modal v-bind="formProps"></add-component-modal>
     </b-modal>
   </section>
@@ -146,7 +146,7 @@
         this.selected = row;
         this.formProps.comment = this.selected.comment;
         this.formProps.id = this.selected.id;
-        this.isComponentModalActive = true;
+        this.$store.commit('set_comment_modal_active');
       },
       assignEvent(row) {
         this.selected = row;
@@ -165,7 +165,6 @@
       return {
         selected: null,
         searchString: '',
-        isComponentModalActive: false,
         formProps: {
           comment: '',
           id: ''

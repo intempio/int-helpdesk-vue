@@ -7,6 +7,7 @@ const createStore = () => {
       events: [],
       attendees_without_events: [],
       loading: false,
+      isCommentModalActive: false
     },
     mutations: {
       set_attendees(state, attendees) {
@@ -20,6 +21,9 @@ const createStore = () => {
       },
       set_loading(state) {
         state.loading = !state.loading
+      },
+      set_comment_modal_active(state) {
+        state.isCommentModalActive = !state.isCommentModalActive;
       }
     },
     actions: {
