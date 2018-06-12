@@ -1,6 +1,14 @@
 <template>
   <div class="modal-card">
     <section class="modal-card-body">
+      <b-field label="Role">
+        <b-select placeholder="Select a role" v-model="formData.role">
+          <option value="attendee">Attendee</option>
+          <option value="doctor">Doctor</option>
+          <option value="rep">Rep</option>
+        </b-select>
+      </b-field>
+
       <b-field label="First Name">
         <b-input v-model="formData.firstName"></b-input>
       </b-field>
@@ -11,14 +19,6 @@
 
       <b-field label="Email">
         <b-input type="email" v-model="formData.email" placeholder="Your email"></b-input>
-      </b-field>
-
-      <b-field label="Role">
-        <b-select placeholder="Select a role" v-model="formData.role">
-          <option value="attendee">Attendee</option>
-          <option value="doctor">Doctor</option>
-          <option value="rep">Rep</option>
-        </b-select>
       </b-field>
     </section>
 
