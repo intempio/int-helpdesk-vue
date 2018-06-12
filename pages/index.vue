@@ -64,7 +64,9 @@
           </b-table-column>
 
           <b-table-column field="" label="Actions">
-           <button class="button field is-small" @click="addComment">Add comment</button>
+            <button class="button field is-small is-primary" @click="addComment(props.row)">
+              {{props.row.comment ? 'Update': 'Add'}} comment
+            </button>
           </b-table-column>
         </template>
 
@@ -90,15 +92,20 @@
         </button>
       </div>
     </div>
+
+    <b-modal :active.sync="isComponentModalActive" has-modal-card width="500">
+      <add-component-modal v-bind="formProps"></add-component-modal>
+    </b-modal>
   </section>
 </template>
 
 <script>
   import {uniqBy} from 'lodash';
   import AssignEventsTable from '../components/AssignEventsTable'
+  import AddComponentModal from '../components/AddComponentModal'
 
   export default {
-    components: {AssignEventsTable},
+    components: {AssignEventsTable, AddComponentModal},
     watchQuery: ['search'],
     key: to => to.fullPath,
     async asyncData({query}) {
@@ -135,8 +142,11 @@
       this.searchString = this.query.search || '';
     },
     methods: {
-      addComment() {
-        alert('add comment');
+      addComment(row) {
+        this.selected = row;
+        this.formProps.comment = this.selected.comment;
+        this.formProps.id = this.selected.id;
+        this.isComponentModalActive = true;
       },
       assignEvent(row) {
         this.selected = row;
@@ -155,6 +165,11 @@
       return {
         selected: null,
         searchString: '',
+        isComponentModalActive: false,
+        formProps: {
+          comment: '',
+          id: ''
+        }
       };
     },
   };
