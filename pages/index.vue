@@ -89,9 +89,9 @@
     <div class="columns is-mobile" v-if="searchString && eventAttendees.length === 0"
          style="margin-top: 200px">
       <div class="column is-half is-offset-one-quarter has-text-centered">
-        <div class="title">No results ...</div>
+        <div class="title">No attendees found ...</div>
         <button class="button field is-primary is-large" @click="$router.push('/create/')">
-          Create and assign event
+          Add attendee
         </button>
       </div>
     </div>
