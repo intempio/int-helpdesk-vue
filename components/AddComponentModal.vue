@@ -1,8 +1,11 @@
 <template>
   <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title"></p>
+    </header>
     <section class="modal-card-body">
       <b-field label="Comment">
-        <b-input maxlength="200" type="textarea" v-model="formComment"></b-input>
+        <b-input maxlength="300" type="textarea" v-model="formComment" size=""></b-input>
       </b-field>
 
     </section>

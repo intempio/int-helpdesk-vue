@@ -1,5 +1,8 @@
 <template>
   <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Edit Attendee</p>
+    </header>
     <section class="modal-card-body">
       <b-field label="Role">
         <b-select placeholder="Select a role" v-model="formData.role">
