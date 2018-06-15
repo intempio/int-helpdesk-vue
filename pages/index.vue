@@ -153,7 +153,8 @@
             return o.event && o.event.date;
           }])
         }
-        return results;
+
+        return results.filter(result => result.event.is_today);
       }
     },
     methods: {
