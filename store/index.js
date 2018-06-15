@@ -45,6 +45,12 @@ const createStore = () => {
         const response = await this.$axios.$get('/Event_Attendee?maxRecords=100&view=Grid%20view' + API_KEY_STRING);
         commit('set_event_attendees', response.records);
       },
+      async UPDATE_EVENT_ATTENDEE({}, {id, data}) {
+        await this.$axios.$patch(`/Event_Attendee/${id}` + API_KEY_STRING, data);
+      },
+      async UPDATE_ATTENDEE({}, {id, data}) {
+        await this.$axios.$patch(`/Attendees/${id}` + API_KEY_STRING, data);
+      },
       async CREATE_EVENT_ATTENDEE({state, commit, dispatch}, {eventId, attendeeId}) {
         await this.$axios
           .$post('event-attendees/', {
