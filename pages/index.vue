@@ -62,11 +62,11 @@
 
 
           <b-table-column field="" label="Actions">
-            <button v-if="props.row.comment" class="button field is-small" @click="addComment(props.row)" style="margin-right: 10px;">
+            <button v-if="props.row.comment" class="button field is-small is-primary" @click="addComment(props.row)" style="margin-right: 10px;">
               Comment
             </button>
 
-            <button v-else class="button field is-small is-primary" @click="addComment(props.row)" style="margin-right: 10px;">
+            <button v-else class="button field is-small" @click="addComment(props.row)" style="margin-right: 10px;">
               Comment
             </button>
             <button class="button field is-small" @click="editAttendee(props.row)">
