@@ -60,13 +60,6 @@
 
           </b-table-column>
 
-          <b-table-column field="pre_registered" label="Pre Registered">
-            {{ props.row.pre_registered ? 'Yes' : 'No'}}
-          </b-table-column>
-
-          <b-table-column field="call_complete" label="Call Complete">
-            {{ props.row.call_complete ? 'Yes': 'No'}}
-          </b-table-column>
 
           <b-table-column field="" label="Actions">
             <button class="button field is-small" @click="addComment(props.row)" style="margin-right: 10px;">
