@@ -154,7 +154,8 @@
           }])
         }
 
-        return results.filter(result => result.event.is_today);
+        // return results.filter(result => result.event && result.event.is_today);
+        return results;
       }
     },
     methods: {
