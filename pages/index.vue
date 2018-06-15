@@ -122,39 +122,39 @@
     },
     computed: {
       eventAttendees() {
-        const filteredAttendee = this.$store.state.attendees.filter(attendee => {
-          return attendee.full_name.toLowerCase().includes(this.searchString.toLowerCase());
-        });
+        // const filteredAttendee = this.$store.state.attendees.filter(attendee => {
+        //   return attendee.full_name.toLowerCase().includes(this.searchString.toLowerCase());
+        // });
 
         let results = [];
-        for (const attendee of filteredAttendee) {
-          if (attendee.event_attendee.length === 0) {
-            results.push({
-              attendee: attendee.id,
-              full_name: attendee.full_name,
-              firstName: attendee.first_name,
-              lastName: attendee.last_name,
-              email: attendee.email,
-              role: attendee.role
-            });
-          }
-          for (const event_attendee of attendee.event_attendee) {
-            results.push(
-              Object.assign(event_attendee, {
-                full_name: attendee.full_name,
-                firstName: attendee.first_name,
-                lastName: attendee.last_name,
-                email: attendee.email,
-                role: attendee.role
-              })
-            );
-          }
-
-          results = uniqBy(results, 'id');
-          results = sortBy(results, [function (o) {
-            return o.event && o.event.date;
-          }])
-        }
+        // for (const attendee of filteredAttendee) {
+        //   if (attendee.event_attendee.length === 0) {
+        //     results.push({
+        //       attendee: attendee.id,
+        //       full_name: attendee.full_name,
+        //       firstName: attendee.first_name,
+        //       lastName: attendee.last_name,
+        //       email: attendee.email,
+        //       role: attendee.role
+        //     });
+        //   }
+        //   for (const event_attendee of attendee.event_attendee) {
+        //     results.push(
+        //       Object.assign(event_attendee, {
+        //         full_name: attendee.full_name,
+        //         firstName: attendee.first_name,
+        //         lastName: attendee.last_name,
+        //         email: attendee.email,
+        //         role: attendee.role
+        //       })
+        //     );
+        //   }
+        //
+        //   results = uniqBy(results, 'id');
+        //   results = sortBy(results, [function (o) {
+        //     return o.event && o.event.date;
+        //   }])
+        // }
         return results;
       }
     },

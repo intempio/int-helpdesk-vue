@@ -1,11 +1,13 @@
 import Vuex from 'vuex';
 
+const API_KEY_STRING = '&api_key=keyF5RqI6oSraQNK7';
+
 const createStore = () => {
   return new Vuex.Store({
     state: {
       attendees: [],
       events: [],
-      attendees_without_events: [],
+      event_attendees: [],
       loading: false,
       isCommentModalActive: false,
       isEditAttendeeModalActive: false,
@@ -14,11 +16,11 @@ const createStore = () => {
       set_attendees(state, attendees) {
         state.attendees = attendees;
       },
-      set_attendees_without_events(state, attendees) {
-        state.attendees_without_events = attendees;
-      },
       set_events(state, events) {
         state.events = events;
+      },
+      set_event_attendees(state, event_attendees) {
+        state.event_attendees = event_attendees;
       },
       set_loading(state) {
         state.loading = !state.loading
@@ -31,15 +33,17 @@ const createStore = () => {
       }
     },
     actions: {
-      GET_ATTENDEES() {
-        return this.$axios.$get('attendees/recent/');
+      async GET_ATTENDEES({commit}) {
+        const response = await this.$axios.$get('/Attendees?maxRecords=100&view=Grid%20view' + API_KEY_STRING);
+        commit('set_attendees', response.records);
       },
-      GET_EVENTS() {
-        return this.$axios.$get('events/');
+      async GET_EVENTS({commit}) {
+        const response = await this.$axios.$get('/Events?maxRecords=100&view=Grid%20view' + API_KEY_STRING);
+        commit('set_events', response.records);
       },
-      async GET_ATTENDEES_WITHOUT_EVENTS({commit}) {
-        const response = await this.$axios.$get('attendees/no_events/');
-        commit('set_attendees_without_events', response.results);
+      async GET_EVENT_ATTENDEES({commit}) {
+        const response = await this.$axios.$get('/Event_Attendee?maxRecords=100&view=Grid%20view' + API_KEY_STRING);
+        commit('set_event_attendees', response.records);
       },
       async CREATE_EVENT_ATTENDEE({state, commit, dispatch}, {eventId, attendeeId}) {
         await this.$axios
@@ -50,10 +54,14 @@ const createStore = () => {
 
         dispatch('nuxtClientInit');
       },
-      async nuxtClientInit({dispatch, commit}) {
-        const [attendees, events] = await Promise.all([dispatch('GET_ATTENDEES'), dispatch('GET_EVENTS')]);
-        commit('set_attendees', attendees.results);
-        commit('set_events', events.results);
+      async nuxtClientInit({dispatch, commit, state}) {
+        await Promise.all([
+          dispatch('GET_ATTENDEES'),
+          dispatch('GET_EVENTS'),
+          dispatch('GET_EVENT_ATTENDEES')
+        ]);
+
+        console.log(state);
       }
     }
   });
