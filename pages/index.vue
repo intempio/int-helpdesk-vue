@@ -29,6 +29,11 @@
       >
 
         <template slot-scope="props">
+          <b-table-column field="role" label="Role">
+            {{ props.row.role.charAt(0).toUpperCase() + props.row.role.slice(1) }}
+          </b-table-column>
+
+
           <b-table-column field="full_name" label="Full Name">
             {{ props.row.full_name }}
           </b-table-column>
@@ -48,9 +53,9 @@
           </b-table-column>
 
           <b-table-column field="redirect_lookup_id" label="Ac Link">
-            <a :href="'http://i17r.com/' + props.row.redirect_lookup_id"
+            <a :href="'http://1call1.com/' + props.row.redirect_lookup_id"
                v-if="props.row.redirect_lookup_id">
-              http://i17r.com/{{ props.row.redirect_lookup_id }}
+              http://1call1.com/{{ props.row.redirect_lookup_id }}
             </a>
 
           </b-table-column>
