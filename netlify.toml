@@ -2,10 +2,3 @@
 publish = "dist"
 command = "npm run generate"
 
-[context.production]
-  [context.production.environment]
-    BASE_URL = "https://biogen-helpdesk-api-prod.herokuapp.com/api/v1/"
-
-[context.branch-deploy]
-  [context.branch-deploy.environment]
-    BASE_URL = "https://biogen-helpdesk-api-prod.herokuapp.com/api/v1/"

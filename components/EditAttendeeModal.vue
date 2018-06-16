@@ -5,23 +5,23 @@
     </header>
     <section class="modal-card-body">
       <b-field label="Role">
-        <b-select placeholder="Select a role" v-model="formData.role">
-          <option value="attendee">Attendee</option>
-          <option value="doctor">Doctor</option>
-          <option value="rep">Rep</option>
+        <b-select placeholder="Select a role" v-model="formData.attendeeRole">
+          <option value="Attendee">Attendee</option>
+          <option value="Doctor">Doctor</option>
+          <option value="Rep">Rep</option>
         </b-select>
       </b-field>
 
       <b-field label="First Name">
-        <b-input v-model="formData.firstName"></b-input>
+        <b-input v-model="formData.attendeeFirstName"></b-input>
       </b-field>
 
       <b-field label="last Name">
-        <b-input v-model="formData.lastName"></b-input>
+        <b-input v-model="formData.attendeeLastName"></b-input>
       </b-field>
 
       <b-field label="Email">
-        <b-input type="email" v-model="formData.email" placeholder="Your email"></b-input>
+        <b-input type="email" v-model="formData.attendeeEmail" placeholder="Your email"></b-input>
       </b-field>
     </section>
 
@@ -35,16 +35,17 @@
 <script>
   export default {
     name: "EditAttendeeModal",
-    props: ['firstName', 'lastName', 'email', 'role', 'id'],
+    props: ['attendeeId', 'attendeeFirstName', 'attendeeLastName', 'attendeeRole', 'attendeeEmail'],
     methods: {
       async updateAttendee() {
         const loadingComponent = this.$loading.open();
-        const {firstName, lastName, email, role} = this.formData;
-        await this.$axios.$patch(`/attendees/${this.id}/`, {
-          first_name: firstName,
-          last_name: lastName,
-          email,
-          role
+        const {attendeeFirstName, attendeeLastName, attendeeEmail, attendeeRole} = this.formData;
+        await this.$store.dispatch('UPDATE_ATTENDEE', {
+          attendeeId: this.attendeeId,
+          attendeeFirstName,
+          attendeeLastName,
+          attendeeEmail,
+          attendeeRole
         });
         loadingComponent.close();
         this.$store.commit('set_edit_attendee_modal_active');
@@ -53,10 +54,10 @@
     data() {
       return {
         formData: {
-          firstName: this.firstName,
-          lastName: this.lastName,
-          email: this.email,
-          role: this.role
+          attendeeFirstName: this.attendeeFirstName,
+          attendeeLastName: this.attendeeLastName,
+          attendeeEmail: this.attendeeEmail,
+          attendeeRole: this.attendeeRole
         }
       }
     }

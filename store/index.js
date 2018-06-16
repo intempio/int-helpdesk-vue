@@ -1,4 +1,5 @@
 import Vuex from 'vuex';
+import {sortBy} from 'lodash';
 
 const API_KEY_STRING = '&api_key=keyF5RqI6oSraQNK7';
 
@@ -11,6 +12,7 @@ const createStore = () => {
       loading: false,
       isCommentModalActive: false,
       isEditAttendeeModalActive: false,
+      searchString: '',
     },
     mutations: {
       set_attendees(state, attendees) {
@@ -30,6 +32,54 @@ const createStore = () => {
       },
       set_edit_attendee_modal_active(state) {
         state.isEditAttendeeModalActive = !state.isEditAttendeeModalActive;
+      },
+      set_search_string(state, searchString) {
+        state.searchString = searchString;
+      }
+    },
+    getters: {
+      searchData: state => {
+        const data = [];
+        state.attendees.forEach(attendee => {
+          const {first_name, last_name, full_name, email, role} = attendee.fields;
+          if (attendee.fields.Event_Attendee) {
+            attendee.fields.Event_Attendee.forEach(id => {
+              const foundObj = state.event_attendees.find(obj => obj.id === id);
+              if (foundObj) {
+                data.push({
+                  attendeeId: attendee.id,
+                  attendeeFullName: full_name,
+                  attendeeFirstName: first_name,
+                  attendeeLastName: last_name,
+                  attendeeRole: role,
+                  attendeeEmail: email,
+                  eventAttendeeId: foundObj.id,
+                  eventId: foundObj.fields.event[0],
+                  eventDate: foundObj.fields.event_date[0],
+                  eventName: foundObj.fields.event_name[0],
+                  redirectLookupId: foundObj.fields.redirect_lookup_id,
+                  comment: foundObj.fields.comment || ''
+                });
+              }
+            });
+          } else {
+            data.push({
+              attendeeId: attendee.id,
+              attendeeFullName: full_name,
+              attendeeFirstName: first_name,
+              attendeeLastName: last_name,
+              attendeeRole: role,
+              attendeeEmail: email
+            });
+          }
+        });
+        const output = data.filter(obj => {
+          return obj.attendeeFullName
+            .toLowerCase()
+            .includes(state.searchString.toLowerCase())
+        });
+
+        return sortBy(output, ['eventDate']);
       }
     },
     actions: {
@@ -38,36 +88,70 @@ const createStore = () => {
         commit('set_attendees', response.records);
       },
       async GET_EVENTS({commit}) {
-        const response = await this.$axios.$get('/Events?maxRecords=100&view=Grid%20view' + API_KEY_STRING);
+        const response = await this.$axios.$get('/Events?maxRecords=100&view=Today' + API_KEY_STRING);
         commit('set_events', response.records);
       },
       async GET_EVENT_ATTENDEES({commit}) {
-        const response = await this.$axios.$get('/Event_Attendee?maxRecords=100&view=Grid%20view' + API_KEY_STRING);
+        const response = await this.$axios.$get('/Event_Attendee?maxRecords=100&view=Today' + API_KEY_STRING);
         commit('set_event_attendees', response.records);
       },
-      async UPDATE_EVENT_ATTENDEE({}, {id, data}) {
-        await this.$axios.$patch(`/Event_Attendee/${id}` + API_KEY_STRING, data);
+      async UPDATE_EVENT_ATTENDEE({dispatch}, {eventAttendeeId, comment}) {
+        await this.$axios.$patch(`/Event_Attendee/${eventAttendeeId}?` + API_KEY_STRING, {
+          fields: {comment}
+        });
+
+        dispatch('GET_EVENT_ATTENDEES')
       },
-      async UPDATE_ATTENDEE({}, {id, data}) {
-        await this.$axios.$patch(`/Attendees/${id}` + API_KEY_STRING, data);
+      async CREATE_ATTENDEE({dispatch}, {
+        attendeeFirstName,
+        attendeeLastName,
+        attendeeEmail,
+        attendeeRole
+      }) {
+        const response = this.$axios.$post('/Attendees?' + API_KEY_STRING, {
+          fields: {
+            first_name: attendeeFirstName,
+            last_name: attendeeLastName,
+            email: attendeeEmail,
+            role: attendeeRole
+          }
+        });
+
+        dispatch('nuxtClientInit');
+        return response;
       },
-      async CREATE_EVENT_ATTENDEE({state, commit, dispatch}, {eventId, attendeeId}) {
-        await this.$axios
-          .$post('event-attendees/', {
-            event: eventId,
-            attendee: attendeeId,
-          });
+      async UPDATE_ATTENDEE({dispatch}, {
+        attendeeId,
+        attendeeFirstName,
+        attendeeLastName,
+        attendeeEmail,
+        attendeeRole
+      }) {
+        await this.$axios.$patch(`/Attendees/${attendeeId}?` + API_KEY_STRING, {
+          fields: {
+            first_name: attendeeFirstName,
+            last_name: attendeeLastName,
+            attendeeEmail: attendeeEmail,
+            role: attendeeRole
+          }
+        });
+
+        dispatch('GET_ATTENDEES')
+      },
+      async CREATE_EVENT_ATTENDEE({state, commit, dispatch}, {event, attendee}) {
+        await this.$axios.$post(
+          '/Event_Attendee?' + API_KEY_STRING,
+          {fields: {event: [event], attendee: [attendee]}}
+        );
 
         dispatch('nuxtClientInit');
       },
-      async nuxtClientInit({dispatch, commit, state}) {
+      async nuxtClientInit({dispatch}) {
         await Promise.all([
           dispatch('GET_ATTENDEES'),
           dispatch('GET_EVENTS'),
           dispatch('GET_EVENT_ATTENDEES')
         ]);
-
-        console.log(state);
       }
     }
   });

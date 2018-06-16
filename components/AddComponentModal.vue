@@ -18,12 +18,16 @@
 
 <script>
   export default {
-    props: ['comment', 'id'],
+    props: ['comment', 'eventAttendeeId'],
     name: "AddComponentModal",
     methods: {
       async updateComment() {
         const loadingComponent = this.$loading.open();
-        await this.$axios.$patch(`/event-attendees/${this.id}/`, {comment: this.formComment});
+        await this.$store.dispatch('UPDATE_EVENT_ATTENDEE', {
+          eventAttendeeId: this.eventAttendeeId,
+          comment: this.formComment
+        });
+
         loadingComponent.close();
         this.$store.commit('set_comment_modal_active');
       }

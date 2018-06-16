@@ -17,53 +17,50 @@
       </div>
     </div>
 
-    <div v-if="eventAttendees.length !== 0">
+    <div v-if="$store.getters.searchData.length !== 0">
       <b-table html
-               :data="eventAttendees"
+               :data="$store.getters.searchData"
                :row-class="(row) => row.event && row.event.is_today && 'is-info'"
                @select="selectRow"
                :selected="selected"
                :paginated="true"
-               :per-page="15"
+               :per-page="10"
                style="width: 100%"
       >
 
         <template slot-scope="props">
-          <b-table-column field="full_name" label="Full Name">
-            {{ props.row.full_name }}
+          <b-table-column label="Role">
+            {{ props.row.attendeeRole }}
           </b-table-column>
 
-          <b-table-column field="event.event_name" label="Event Name">
-            <div v-if="!props.row.event">
+          <b-table-column label="Full Name" width="150">
+            {{ props.row.attendeeFullName }}
+          </b-table-column>
+
+
+          <b-table-column label="Event Name">
+            <div v-if="!props.row.eventId">
               not assigned to any current or future events
               <a class="button is-small is-link" @click="assignEvent(props.row)">
                 Assign Event
               </a>
             </div>
-            <span v-else>{{ props.row.event.event_name }}  </span>
+            <span v-else>{{ props.row.eventName }}  </span>
           </b-table-column>
 
-          <b-table-column field="event.date" label="Event Date">
-            {{ props.row.event && props.row.event.date}}
+          <b-table-column label="Event Date" width="150">
+            {{ props.row.eventDate| formatDate }}
           </b-table-column>
 
-          <b-table-column field="redirect_lookup_id" label="Ac Link">
-            <a :href="'http://i17r.com/' + props.row.redirect_lookup_id"
-               v-if="props.row.redirect_lookup_id">
-              http://i17r.com/{{ props.row.redirect_lookup_id }}
+          <b-table-column label="Ac Link" width="150">
+            <a :href="'http://1call1.com/' + props.row.redirectLookupId"
+               v-if="props.row.redirectLookupId">
+              http://1call1.com/{{ props.row.redirectLookupId }}
             </a>
-
           </b-table-column>
 
-          <b-table-column field="pre_registered" label="Pre Registered">
-            {{ props.row.pre_registered ? 'Yes' : 'No'}}
-          </b-table-column>
 
-          <b-table-column field="call_complete" label="Call Complete">
-            {{ props.row.call_complete ? 'Yes': 'No'}}
-          </b-table-column>
-
-          <b-table-column field="" label="Actions">
+          <b-table-column field="" label="Actions" width="160">
             <button class="button field is-small" @click="addComment(props.row)" style="margin-right: 10px;">
               Comment
             </button>
@@ -74,19 +71,19 @@
         </template>
 
         <template slot="bottom-left">
-          <button class="button field is-primary is-small" @click="selected = {id: '', fullName: ''}"
-                  v-show="selected && selected.attendee">
+          <button class="button field is-primary is-small" @click="selected = null"
+                  v-show="selected">
             <b-icon icon="close"></b-icon>
             <span>Clear selected</span>
           </button>
         </template>
       </b-table>
 
-      <AssignEventsTable v-if="selected && selected.attendee" class="section" :selected="selected"/>
+      <AssignEventsTable v-if="selected" class="section" :attendee="selected"/>
     </div>
 
 
-    <div class="columns is-mobile" v-if="searchString && eventAttendees.length === 0"
+    <div class="columns is-mobile" v-if="searchString && $store.getters.searchData.length === 0"
          style="margin-top: 200px">
       <div class="column is-half is-offset-one-quarter has-text-centered">
         <div class="title">No attendees found ...</div>
@@ -108,7 +105,6 @@
 </template>
 
 <script>
-  import {uniqBy, sortBy} from 'lodash';
   import AssignEventsTable from '../components/AssignEventsTable'
   import AddComponentModal from '../components/AddComponentModal'
   import EditAttendeeModal from '../components/EditAttendeeModal'
@@ -117,58 +113,38 @@
     components: {AssignEventsTable, AddComponentModal, EditAttendeeModal},
     watchQuery: ['search'],
     key: to => to.fullPath,
-    async asyncData({query}) {
+    async asyncData({query, store}) {
+      if (query.search) {
+        store.commit('set_search_string', query.search)
+      }
       return {query};
     },
-    computed: {
-      eventAttendees() {
-        // const filteredAttendee = this.$store.state.attendees.filter(attendee => {
-        //   return attendee.full_name.toLowerCase().includes(this.searchString.toLowerCase());
-        // });
-
-        let results = [];
-        // for (const attendee of filteredAttendee) {
-        //   if (attendee.event_attendee.length === 0) {
-        //     results.push({
-        //       attendee: attendee.id,
-        //       full_name: attendee.full_name,
-        //       firstName: attendee.first_name,
-        //       lastName: attendee.last_name,
-        //       email: attendee.email,
-        //       role: attendee.role
-        //     });
-        //   }
-        //   for (const event_attendee of attendee.event_attendee) {
-        //     results.push(
-        //       Object.assign(event_attendee, {
-        //         full_name: attendee.full_name,
-        //         firstName: attendee.first_name,
-        //         lastName: attendee.last_name,
-        //         email: attendee.email,
-        //         role: attendee.role
-        //       })
-        //     );
-        //   }
-        //
-        //   results = uniqBy(results, 'id');
-        //   results = sortBy(results, [function (o) {
-        //     return o.event && o.event.date;
-        //   }])
-        // }
-        return results;
-      }
-    },
+    computed: {},
     methods: {
       addComment(row) {
         this.selected = row;
-        const {comment, id} = this.selected;
-        Object.assign(this.commentFormProps, {id, comment});
+        const {comment, eventAttendeeId} = this.selected;
+        Object.assign(this.commentFormProps, {comment, eventAttendeeId});
         this.$store.commit('set_comment_modal_active');
       },
       editAttendee(row) {
         this.selected = row;
-        const {attendee, firstName, lastName, email, role} = this.selected;
-        Object.assign(this.attendeeFormProps, {id: attendee, firstName, lastName, email, role});
+        const {
+          attendeeId,
+          attendeeFirstName,
+          attendeeLastName,
+          attendeeFullName,
+          attendeeRole,
+          attendeeEmail
+        } = this.selected;
+        Object.assign(this.attendeeFormProps, {
+          attendeeId,
+          attendeeFirstName,
+          attendeeLastName,
+          attendeeFullName,
+          attendeeRole,
+          attendeeEmail
+        });
         this.$store.commit('set_edit_attendee_modal_active');
       },
       assignEvent(row) {
@@ -181,20 +157,21 @@
     },
     watch: {
       searchString() {
-        this.selected = {id: '', fullName: ''};
+        this.selected = null;
+        this.$store.commit('set_search_string', this.searchString)
       }
     },
     data() {
       return {
         selected: null,
         searchString: this.query && this.query.search || '',
-        commentFormProps: {comment: '', id: ''},
+        commentFormProps: {comment: '', eventAttendeeId: ''},
         attendeeFormProps: {
-          id: '',
-          firstName: '',
-          lastName: '',
-          email: '',
-          role: ''
+          attendeeId: '',
+          attendeeFirstName: '',
+          attendeeLastName: '',
+          attendeeRole: '',
+          attendeeEmail: ''
         }
       };
     },

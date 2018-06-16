@@ -32,7 +32,8 @@ module.exports = {
   plugins: [
     {src: '~/plugins/nuxt-client-init.js', ssr: false},
     '~plugins/vue-scrollto.js',
-    '~plugins/axios'
+    '~plugins/axios',
+    '~plugins/filters'
   ],
 
   /*
@@ -49,11 +50,11 @@ module.exports = {
   */
 
   env: {
-    baseUrl: process.env.BASE_URL || ' https://api.airtable.com/v0/appyYO6TiExpMlFjt',
+    baseUrl: 'https://api.airtable.com/v0/appyYO6TiExpMlFjt',
   },
   axios: {
     proxyHeaders: false,
-    baseURL: process.env.BASE_URL || ' https://api.airtable.com/v0/appyYO6TiExpMlFjt',
+    baseURL: 'https://api.airtable.com/v0/appyYO6TiExpMlFjt',
     debug: true
   },
 
