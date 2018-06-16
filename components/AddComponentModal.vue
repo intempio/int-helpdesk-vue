@@ -30,6 +30,7 @@
 
         loadingComponent.close();
         this.$store.commit('set_comment_modal_active');
+        await this.$store.dispatch('nuxtClientInit');
       }
     },
     data() {

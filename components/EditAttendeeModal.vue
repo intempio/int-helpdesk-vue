@@ -49,6 +49,7 @@
         });
         loadingComponent.close();
         this.$store.commit('set_edit_attendee_modal_active');
+        await this.$store.dispatch('nuxtClientInit');
       }
     },
     data() {
