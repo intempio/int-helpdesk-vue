@@ -147,7 +147,7 @@ const createStore = () => {
           fields: {
             first_name: attendeeFirstName,
             last_name: attendeeLastName,
-            attendeeEmail: attendeeEmail,
+            email: attendeeEmail,
             role: attendeeRole,
           },
         })
