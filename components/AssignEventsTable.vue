@@ -37,30 +37,33 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      attendee: Object
+export default {
+  props: {
+    attendee: Object,
+  },
+  name: 'AssignEventsTable',
+  methods: {
+    confirm(row) {
+      this.$dialog.confirm({
+        message: `Assign <strong>${
+          this.attendee.attendeeFullName
+        }</strong> to <strong>${row.fields.topic}</strong>?`,
+        onConfirm: () => this.createEventAttendee(row),
+        confirmText: 'Confirm',
+      })
     },
-    name: "AssignEventsTable",
-    methods: {
-      confirm(row) {
-        this.$dialog.confirm({
-          message: `Assign <strong>${this.attendee.attendeeFullName}</strong> to <strong>${row.fields.topic}</strong>?`,
-          onConfirm: () => this.createEventAttendee(row),
-          confirmText: 'Confirm'
-        })
-      },
-      async createEventAttendee(row) {
-        const loadingComponent = this.$loading.open();
-        await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
-          event: row.id,
-          attendee: this.attendee.attendeeId
-        });
-        loadingComponent.close();
-        this.$toast.open(`Assigned ${this.attendee.attendeeFullName} to ${row.fields.topic}.`);
-        this.$scrollTo('#search');
-      },
+    async createEventAttendee(row) {
+      const loadingComponent = this.$loading.open()
+      await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
+        event: row.id,
+        attendee: this.attendee.attendeeId,
+      })
+      loadingComponent.close()
+      this.$toast.open(
+        `Assigned ${this.attendee.attendeeFullName} to ${row.fields.topic}.`
+      )
+      this.$scrollTo('#search')
     },
-  }
+  },
+}
 </script>
-

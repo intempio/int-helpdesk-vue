@@ -33,35 +33,45 @@
 </template>
 
 <script>
-  export default {
-    name: "EditAttendeeModal",
-    props: ['attendeeId', 'attendeeFirstName', 'attendeeLastName', 'attendeeRole', 'attendeeEmail'],
-    methods: {
-      async updateAttendee() {
-        const loadingComponent = this.$loading.open();
-        const {attendeeFirstName, attendeeLastName, attendeeEmail, attendeeRole} = this.formData;
-        await this.$store.dispatch('UPDATE_ATTENDEE', {
-          attendeeId: this.attendeeId,
-          attendeeFirstName,
-          attendeeLastName,
-          attendeeEmail,
-          attendeeRole
-        });
-        loadingComponent.close();
-        this.$store.commit('set_edit_attendee_modal_active');
-        await this.$store.dispatch('nuxtClientInit');
-      }
+export default {
+  name: 'EditAttendeeModal',
+  props: [
+    'attendeeId',
+    'attendeeFirstName',
+    'attendeeLastName',
+    'attendeeRole',
+    'attendeeEmail',
+  ],
+  methods: {
+    async updateAttendee() {
+      const loadingComponent = this.$loading.open()
+      const {
+        attendeeFirstName,
+        attendeeLastName,
+        attendeeEmail,
+        attendeeRole,
+      } = this.formData
+      await this.$store.dispatch('UPDATE_ATTENDEE', {
+        attendeeId: this.attendeeId,
+        attendeeFirstName,
+        attendeeLastName,
+        attendeeEmail,
+        attendeeRole,
+      })
+      loadingComponent.close()
+      this.$store.commit('set_edit_attendee_modal_active')
+      await this.$store.dispatch('nuxtClientInit')
     },
-    data() {
-      return {
-        formData: {
-          attendeeFirstName: this.attendeeFirstName,
-          attendeeLastName: this.attendeeLastName,
-          attendeeEmail: this.attendeeEmail,
-          attendeeRole: this.attendeeRole
-        }
-      }
+  },
+  data() {
+    return {
+      formData: {
+        attendeeFirstName: this.attendeeFirstName,
+        attendeeLastName: this.attendeeLastName,
+        attendeeEmail: this.attendeeEmail,
+        attendeeRole: this.attendeeRole,
+      },
     }
-  }
+  },
+}
 </script>
-

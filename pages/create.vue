@@ -59,56 +59,63 @@
 </template>
 
 <script>
-  export default {
-    computed: {
-      readyToSubmit() {
-        const {
-          attendeeFirstName,
-          attendeeLastName,
-          attendeeEmail,
-          attendeeRole
-        } = this.attendee;
-        return attendeeFirstName && attendeeLastName && attendeeEmail && attendeeRole;
-      },
-      fullName() {
-        return this.attendee.attendeeFirstName + ' ' + this.attendee.attendeeLastName;
-      }
+export default {
+  computed: {
+    readyToSubmit() {
+      const {
+        attendeeFirstName,
+        attendeeLastName,
+        attendeeEmail,
+        attendeeRole,
+      } = this.attendee
+      return (
+        attendeeFirstName && attendeeLastName && attendeeEmail && attendeeRole
+      )
     },
-    name: "create",
-    data() {
-      return {
-        attendee: {
-          attendeeFirstName: '',
-          attendeeLastName: '',
-          attendeeEmail: '',
-          attendeeRole: '',
-        }
-      }
+    fullName() {
+      return (
+        this.attendee.attendeeFirstName + ' ' + this.attendee.attendeeLastName
+      )
     },
-    methods: {
-      confirm(row) {
-        this.$dialog.confirm({
-          message: `Assign <strong>${this.fullName}</strong> to <strong>${row.fields.topic}</strong>?`,
-          onConfirm: () => this.createEventAttendee(row),
-          confirmText: 'Confirm'
-        })
+  },
+  name: 'create',
+  data() {
+    return {
+      attendee: {
+        attendeeFirstName: '',
+        attendeeLastName: '',
+        attendeeEmail: '',
+        attendeeRole: '',
       },
-      async createEventAttendee(row) {
-        const loadingComponent = this.$loading.open();
-        const {id} = await this.$store.dispatch('CREATE_ATTENDEE', this.attendee);
-        await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
-          event: row.id,
-          attendee: id
-        });
-        loadingComponent.close();
-        this.$toast.open(`Assigned ${this.fullName} to ${row.fields.topic}.`);
-        this.$router.push({
-          name: 'index',
-          query: {search: `${this.fullName}`}
-        });
-
-      },
+    }
+  },
+  methods: {
+    confirm(row) {
+      this.$dialog.confirm({
+        message: `Assign <strong>${this.fullName}</strong> to <strong>${
+          row.fields.topic
+        }</strong>?`,
+        onConfirm: () => this.createEventAttendee(row),
+        confirmText: 'Confirm',
+      })
     },
-  }
+    async createEventAttendee(row) {
+      const loadingComponent = this.$loading.open()
+      const { id } = await this.$store.dispatch(
+        'CREATE_ATTENDEE',
+        this.attendee
+      )
+      await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
+        event: row.id,
+        attendee: id,
+      })
+      loadingComponent.close()
+      this.$toast.open(`Assigned ${this.fullName} to ${row.fields.topic}.`)
+      this.$router.push({
+        name: 'index',
+        query: { search: `${this.fullName}` },
+      })
+    },
+  },
+}
 </script>
-
