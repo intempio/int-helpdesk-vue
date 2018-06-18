@@ -19,8 +19,7 @@
         </b-field>
 
         <b-field label="Email">
-          <b-input type="email"
-                   v-model="attendee.attendeeEmail">
+          <b-input type="email" v-model="attendee.attendeeEmail">
           </b-input>
         </b-field>
       </div>
@@ -31,12 +30,7 @@
     </div>
 
     <div class="columns">
-      <b-table html
-               :data="$store.state.events"
-               :paginated="true"
-               :per-page="10"
-               style="width: 100%"
-      >
+      <b-table html :data="$store.state.events" :paginated="true" :per-page="10" style="width: 100%">
 
         <template slot-scope="props">
           <b-table-column label="Event Name">
@@ -67,15 +61,15 @@ export default {
         attendeeLastName,
         attendeeEmail,
         attendeeRole,
-      } = this.attendee
+      } = this.attendee;
       return (
         attendeeFirstName && attendeeLastName && attendeeEmail && attendeeRole
-      )
+      );
     },
     fullName() {
       return (
         this.attendee.attendeeFirstName + ' ' + this.attendee.attendeeLastName
-      )
+      );
     },
   },
   name: 'create',
@@ -87,7 +81,7 @@ export default {
         attendeeEmail: '',
         attendeeRole: '',
       },
-    }
+    };
   },
   methods: {
     confirm(row) {
@@ -97,25 +91,25 @@ export default {
         }</strong>?`,
         onConfirm: () => this.createEventAttendee(row),
         confirmText: 'Confirm',
-      })
+      });
     },
     async createEventAttendee(row) {
-      const loadingComponent = this.$loading.open()
+      const loadingComponent = this.$loading.open();
       const { id } = await this.$store.dispatch(
         'CREATE_ATTENDEE',
         this.attendee
-      )
+      );
       await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
         event: row.id,
         attendee: id,
-      })
-      loadingComponent.close()
-      this.$toast.open(`Assigned ${this.fullName} to ${row.fields.topic}.`)
+      });
+      loadingComponent.close();
+      this.$toast.open(`Assigned ${this.fullName} to ${row.fields.topic}.`);
       this.$router.push({
         name: 'index',
         query: { search: `${this.fullName}` },
-      })
+      });
     },
   },
-}
+};
 </script>

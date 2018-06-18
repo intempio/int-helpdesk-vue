@@ -85,9 +85,9 @@
 </template>
 
 <script>
-import AssignEventsTable from '../components/AssignEventsTable'
-import AddComponentModal from '../components/AddComponentModal'
-import EditAttendeeModal from '../components/EditAttendeeModal'
+import AssignEventsTable from '../components/AssignEventsTable';
+import AddComponentModal from '../components/AddComponentModal';
+import EditAttendeeModal from '../components/EditAttendeeModal';
 
 export default {
   components: { AssignEventsTable, AddComponentModal, EditAttendeeModal },
@@ -95,20 +95,20 @@ export default {
   key: to => to.fullPath,
   async asyncData({ query, store }) {
     if (query.search) {
-      store.commit('set_search_string', query.search)
+      store.commit('set_search_string', query.search);
     }
-    return { query }
+    return { query };
   },
   computed: {},
   methods: {
     addComment(row) {
-      this.selected = row
-      const { comment, eventAttendeeId } = this.selected
-      Object.assign(this.commentFormProps, { comment, eventAttendeeId })
-      this.$store.commit('set_comment_modal_active')
+      this.selected = row;
+      const { comment, eventAttendeeId } = this.selected;
+      Object.assign(this.commentFormProps, { comment, eventAttendeeId });
+      this.$store.commit('set_comment_modal_active');
     },
     editAttendee(row) {
-      this.selected = row
+      this.selected = row;
       const {
         attendeeId,
         attendeeFirstName,
@@ -116,7 +116,7 @@ export default {
         attendeeFullName,
         attendeeRole,
         attendeeEmail,
-      } = this.selected
+      } = this.selected;
       Object.assign(this.attendeeFormProps, {
         attendeeId,
         attendeeFirstName,
@@ -124,21 +124,21 @@ export default {
         attendeeFullName,
         attendeeRole,
         attendeeEmail,
-      })
-      this.$store.commit('set_edit_attendee_modal_active')
+      });
+      this.$store.commit('set_edit_attendee_modal_active');
     },
     assignEvent(row) {
-      this.selected = row
-      this.$scrollTo('#assign-event')
+      this.selected = row;
+      this.$scrollTo('#assign-event');
     },
     selectRow(row) {
-      this.selected = row
+      this.selected = row;
     },
   },
   watch: {
     searchString() {
-      this.selected = null
-      this.$store.commit('set_search_string', this.searchString)
+      this.selected = null;
+      this.$store.commit('set_search_string', this.searchString);
     },
   },
   data() {
@@ -153,7 +153,7 @@ export default {
         attendeeRole: '',
         attendeeEmail: '',
       },
-    }
+    };
   },
-}
+};
 </script>

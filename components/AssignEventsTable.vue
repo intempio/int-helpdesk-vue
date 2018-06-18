@@ -9,12 +9,7 @@
       </template>
     </div>
     <div class="columns">
-      <b-table html
-               :data="$store.state.events"
-               :paginated="true"
-               :per-page="10"
-               style="width: 100%"
-      >
+      <b-table html :data="$store.state.events" :paginated="true" :per-page="10" style="width: 100%">
 
         <template slot-scope="props">
           <b-table-column label="Event Name">
@@ -50,20 +45,20 @@ export default {
         }</strong> to <strong>${row.fields.topic}</strong>?`,
         onConfirm: () => this.createEventAttendee(row),
         confirmText: 'Confirm',
-      })
+      });
     },
     async createEventAttendee(row) {
-      const loadingComponent = this.$loading.open()
+      const loadingComponent = this.$loading.open();
       await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
         event: row.id,
         attendee: this.attendee.attendeeId,
-      })
-      loadingComponent.close()
+      });
+      loadingComponent.close();
       this.$toast.open(
         `Assigned ${this.attendee.attendeeFullName} to ${row.fields.topic}.`
-      )
-      this.$scrollTo('#search')
+      );
+      this.$scrollTo('#search');
     },
   },
-}
+};
 </script>

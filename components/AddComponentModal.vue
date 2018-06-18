@@ -22,21 +22,21 @@ export default {
   name: 'AddComponentModal',
   methods: {
     async updateComment() {
-      const loadingComponent = this.$loading.open()
+      const loadingComponent = this.$loading.open();
       await this.$store.dispatch('UPDATE_EVENT_ATTENDEE', {
         eventAttendeeId: this.eventAttendeeId,
         comment: this.formComment,
-      })
+      });
 
-      loadingComponent.close()
-      this.$store.commit('set_comment_modal_active')
-      await this.$store.dispatch('nuxtClientInit')
+      loadingComponent.close();
+      this.$store.commit('set_comment_modal_active');
+      await this.$store.dispatch('nuxtClientInit');
     },
   },
   data() {
     return {
       formComment: this.comment,
-    }
+    };
   },
-}
+};
 </script>

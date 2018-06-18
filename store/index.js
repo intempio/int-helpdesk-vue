@@ -1,7 +1,7 @@
-import Vuex from 'vuex'
-import { sortBy } from 'lodash'
+import Vuex from 'vuex';
+import { sortBy } from 'lodash';
 
-const API_KEY_STRING = '&api_key=keyF5RqI6oSraQNK7'
+const API_KEY_STRING = '&api_key=keyF5RqI6oSraQNK7';
 
 const createStore = () => {
   return new Vuex.Store({
@@ -16,30 +16,30 @@ const createStore = () => {
     },
     mutations: {
       set_attendees(state, attendees) {
-        state.attendees = attendees
+        state.attendees = attendees;
       },
       set_events(state, events) {
-        state.events = events
+        state.events = events;
       },
       set_event_attendees(state, event_attendees) {
-        state.event_attendees = event_attendees
+        state.event_attendees = event_attendees;
       },
       set_loading(state) {
-        state.loading = !state.loading
+        state.loading = !state.loading;
       },
       set_comment_modal_active(state) {
-        state.isCommentModalActive = !state.isCommentModalActive
+        state.isCommentModalActive = !state.isCommentModalActive;
       },
       set_edit_attendee_modal_active(state) {
-        state.isEditAttendeeModalActive = !state.isEditAttendeeModalActive
+        state.isEditAttendeeModalActive = !state.isEditAttendeeModalActive;
       },
       set_search_string(state, searchString) {
-        state.searchString = searchString
+        state.searchString = searchString;
       },
     },
     getters: {
       searchData: state => {
-        const data = []
+        const data = [];
         state.attendees.forEach(attendee => {
           const {
             first_name,
@@ -47,10 +47,10 @@ const createStore = () => {
             full_name,
             email,
             role,
-          } = attendee.fields
+          } = attendee.fields;
           if (attendee.fields.Event_Attendee) {
             attendee.fields.Event_Attendee.forEach(id => {
-              const foundObj = state.event_attendees.find(obj => obj.id === id)
+              const foundObj = state.event_attendees.find(obj => obj.id === id);
               if (foundObj) {
                 data.push({
                   attendeeId: attendee.id,
@@ -65,9 +65,9 @@ const createStore = () => {
                   eventName: foundObj.fields.event_name[0],
                   redirectLookupId: foundObj.fields.redirect_lookup_id,
                   comment: foundObj.fields.comment || '',
-                })
+                });
               }
-            })
+            });
           } else {
             data.push({
               attendeeId: attendee.id,
@@ -76,36 +76,36 @@ const createStore = () => {
               attendeeLastName: last_name,
               attendeeRole: role,
               attendeeEmail: email,
-            })
+            });
           }
-        })
+        });
         const output = data.filter(obj => {
           return obj.attendeeFullName
             .toLowerCase()
-            .includes(state.searchString.toLowerCase())
-        })
+            .includes(state.searchString.toLowerCase());
+        });
 
-        return sortBy(output, ['eventDate'])
+        return sortBy(output, ['eventDate']);
       },
     },
     actions: {
       async GET_ATTENDEES({ commit }) {
         const response = await this.$axios.$get(
           '/Attendees?maxRecords=100&view=Grid%20view' + API_KEY_STRING
-        )
-        commit('set_attendees', response.records)
+        );
+        commit('set_attendees', response.records);
       },
       async GET_EVENTS({ commit }) {
         const response = await this.$axios.$get(
           '/Events?maxRecords=100&view=Today' + API_KEY_STRING
-        )
-        commit('set_events', response.records)
+        );
+        commit('set_events', response.records);
       },
       async GET_EVENT_ATTENDEES({ commit }) {
         const response = await this.$axios.$get(
           '/Event_Attendee?maxRecords=100&view=Today' + API_KEY_STRING
-        )
-        commit('set_event_attendees', response.records)
+        );
+        commit('set_event_attendees', response.records);
       },
       async UPDATE_EVENT_ATTENDEE({ dispatch }, { eventAttendeeId, comment }) {
         await this.$axios.$patch(
@@ -113,9 +113,9 @@ const createStore = () => {
           {
             fields: { comment },
           }
-        )
+        );
 
-        dispatch('GET_EVENT_ATTENDEES')
+        dispatch('GET_EVENT_ATTENDEES');
       },
       async CREATE_ATTENDEE(
         { dispatch },
@@ -128,10 +128,10 @@ const createStore = () => {
             email: attendeeEmail,
             role: attendeeRole,
           },
-        })
+        });
 
-        dispatch('nuxtClientInit')
-        return response
+        dispatch('nuxtClientInit');
+        return response;
       },
       async UPDATE_ATTENDEE(
         { dispatch },
@@ -150,9 +150,9 @@ const createStore = () => {
             email: attendeeEmail,
             role: attendeeRole,
           },
-        })
+        });
 
-        dispatch('GET_ATTENDEES')
+        dispatch('GET_ATTENDEES');
       },
       async CREATE_EVENT_ATTENDEE(
         { state, commit, dispatch },
@@ -160,19 +160,19 @@ const createStore = () => {
       ) {
         await this.$axios.$post('/Event_Attendee?' + API_KEY_STRING, {
           fields: { event: [event], attendee: [attendee] },
-        })
+        });
 
-        dispatch('nuxtClientInit')
+        dispatch('nuxtClientInit');
       },
       async nuxtClientInit({ dispatch }) {
         await Promise.all([
           dispatch('GET_ATTENDEES'),
           dispatch('GET_EVENTS'),
           dispatch('GET_EVENT_ATTENDEES'),
-        ])
+        ]);
       },
     },
-  })
-}
+  });
+};
 
-export default createStore
+export default createStore;
