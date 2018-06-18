@@ -46,4 +46,9 @@ tr.is-info td {
   background: #154274;
 }
 
-table:focus { outline: none; }
+table:focus {
+  outline: none;
+}
+p {
+  color: red;
+}
