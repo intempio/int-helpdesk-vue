@@ -42,11 +42,11 @@ const createStore = () => {
         const data = [];
         state.attendees.forEach(attendee => {
           const {
-            first_name,
-            last_name,
-            full_name,
-            email,
-            role,
+            first_name = '',
+            last_name = '',
+            full_name = '',
+            email = '',
+            role = '',
           } = attendee.fields;
           if (attendee.fields.Event_Attendee) {
             attendee.fields.Event_Attendee.forEach(id => {
@@ -60,9 +60,15 @@ const createStore = () => {
                   attendeeRole: role,
                   attendeeEmail: email,
                   eventAttendeeId: foundObj.id,
-                  eventId: foundObj.fields.event[0],
-                  eventDate: foundObj.fields.event_date[0],
-                  eventName: foundObj.fields.event_name[0],
+                  eventId: foundObj.fields.event
+                    ? foundObj.fields.event[0]
+                    : '',
+                  eventDate: foundObj.fields.event_date
+                    ? foundObj.fields.event_date[0]
+                    : '',
+                  eventName: foundObj.fields.event_name
+                    ? foundObj.fields.event_name[0]
+                    : '',
                   redirectLookupId: foundObj.fields.redirect_lookup_id,
                   comment: foundObj.fields.comment || '',
                 });
