@@ -1,6 +1,11 @@
 <template>
   <section class="section">
     <div class="columns is-mobile">
+      <div class="column">
+        <b-field>
+          <img src="http://intempio.com/wp-content/uploads/2018/05/INTEMPIO_FINAL_Tag1.png" class="site-logo" />
+        </b-field>
+      </div>
       <div class="column is-half is-offset-one-quarter">
         <div>
           <b-field>
@@ -15,25 +20,32 @@
       <b-table html :data="$store.getters.searchData" :row-class="(row) => row.event && row.event.is_today && 'is-info'" @select="selectRow" :selected="selected" :paginated="true" :per-page="10" style="width: 100%">
 
         <template slot-scope="props">
-          <b-table-column label="Role">
-            {{ props.row.attendeeRole }}
+          <b-table-column label="Program ID">
+            {{ props.row.eventId }}
           </b-table-column>
 
-          <b-table-column label="Full Name" width="150">
+          <b-table-column label="Attendee" width="175">
             {{ props.row.attendeeFullName }}
           </b-table-column>
 
-          <b-table-column label="Event Name">
+          <b-table-column label="Email" width="150">
+            {{ props.row.attendeeEmail }}
+          </b-table-column>
+
+          <b-table-column label="Event Name" width="260" class="eventtd">
             <div v-if="!props.row.eventId">
               not assigned to any current or future events
               <a class="button is-small is-link" @click="assignEvent(props.row)">
                 Assign Event
               </a>
             </div>
-            <span v-else>{{ props.row.eventName }} </span>
+            <span class="eventname" v-else>
+              {{ props.row.eventName }}
+              <span class="etooltip">{{ props.row.eventName }} </span>
+            </span>
           </b-table-column>
 
-          <b-table-column label="Event Date" width="150">
+          <b-table-column label="Event Date" width="200">
             {{ props.row.eventDate| formatDate }}
           </b-table-column>
 
@@ -43,13 +55,17 @@
             </a>
           </b-table-column>
 
-          <b-table-column field="" label="Actions" width="160">
+          <b-table-column field="" label="Actions" width="165">
             <button class="button field is-small" @click="addComment(props.row)" style="margin-right: 10px;">
               Comment
             </button>
             <button class="button field is-small" @click="editAttendee(props.row)">
               Edit
             </button>
+          </b-table-column>
+
+          <b-table-column label="Done" width="50" class="done-action">
+            <input type="checkbox" name="done" />
           </b-table-column>
         </template>
 
