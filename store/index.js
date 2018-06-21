@@ -42,11 +42,11 @@ const createStore = () => {
         const data = [];
         state.attendees.forEach(attendee => {
           const {
-            first_name = '',
-            last_name = '',
-            full_name = '',
-            email = '',
-            role = '',
+            first_name,
+            last_name,
+            full_name,
+            email,
+            role,
           } = attendee.fields;
           if (attendee.fields.Event_Attendee) {
             attendee.fields.Event_Attendee.forEach(id => {
@@ -60,14 +60,12 @@ const createStore = () => {
                   attendeeRole: role,
                   attendeeEmail: email,
                   eventAttendeeId: foundObj.id,
-                  eventId: foundObj.fields.event
-                    ? foundObj.fields.event[0]
-                    : '',
-                  eventDate: foundObj.fields.event_date
-                    ? foundObj.fields.event_date[0]
-                    : '',
-                  eventName: foundObj.fields.event_name
-                    ? foundObj.fields.event_name[0]
+                  eventId: foundObj.fields.event[0],
+                  eventDate: foundObj.fields.event_date[0],
+                  eventName: foundObj.fields.event_name[0],
+                  eventDone: foundObj.fields.done || false,
+                  eventProgramId: foundObj.fields.program_id
+                    ? foundObj.fields.program_id[0]
                     : '',
                   redirectLookupId: foundObj.fields.redirect_lookup_id,
                   comment: foundObj.fields.comment || '',
@@ -113,11 +111,27 @@ const createStore = () => {
         );
         commit('set_event_attendees', response.records);
       },
-      async UPDATE_EVENT_ATTENDEE({ dispatch }, { eventAttendeeId, comment }) {
+      async UPDATE_COMMENT_EVENT_ATTENDEE(
+        { dispatch },
+        { eventAttendeeId, comment }
+      ) {
         await this.$axios.$patch(
           `/Event_Attendee/${eventAttendeeId}?` + API_KEY_STRING,
           {
             fields: { comment },
+          }
+        );
+
+        dispatch('GET_EVENT_ATTENDEES');
+      },
+      async UPDATE_DONE_EVENT_ATTENDEE(
+        { dispatch },
+        { eventAttendeeId, done }
+      ) {
+        await this.$axios.$patch(
+          `/Event_Attendee/${eventAttendeeId}?` + API_KEY_STRING,
+          {
+            fields: { done },
           }
         );
 
