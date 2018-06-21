@@ -65,7 +65,7 @@
           </b-table-column>
 
           <b-table-column label="Done" width="50" class="done-action" centered>
-            <input type="checkbox" name="done" />
+            <b-checkbox :value="props.row.eventDone" @input="handleDone" />
           </b-table-column>
         </template>
 
@@ -117,6 +117,12 @@ export default {
   },
   computed: {},
   methods: {
+    handleDone(value){
+      this.$store.dispatch('UPDATE_DONE_EVENT_ATTENDEE', {
+        eventAttendeeId: this.selected.eventAttendeeId,
+        done: value
+      });
+    },
     addComment(row) {
       this.selected = row;
       const { comment, eventAttendeeId } = this.selected;

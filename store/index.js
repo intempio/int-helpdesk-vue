@@ -63,6 +63,7 @@ const createStore = () => {
                   eventId: foundObj.fields.event[0],
                   eventDate: foundObj.fields.event_date[0],
                   eventName: foundObj.fields.event_name[0],
+                  eventDone: foundObj.fields.done || false,
                   eventProgramId: foundObj.fields.program_id
                     ? foundObj.fields.program_id[0]
                     : '',
