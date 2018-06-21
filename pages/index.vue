@@ -21,7 +21,7 @@
 
         <template slot-scope="props">
           <b-table-column label="Program ID">
-            {{ props.row.eventId }}
+            {{ props.row.eventProgramId }}
           </b-table-column>
 
           <b-table-column label="Attendee" width="175">
@@ -49,13 +49,13 @@
             {{ props.row.eventDate| formatDate }}
           </b-table-column>
 
-          <b-table-column label="Ac Link" width="150">
+          <b-table-column label="Ac Link" width="150" centered>
             <a :href="'http://1call1.com/' + props.row.redirectLookupId" v-if="props.row.redirectLookupId">
               http://1call1.com/{{ props.row.redirectLookupId }}
             </a>
           </b-table-column>
 
-          <b-table-column field="" label="Actions" width="165">
+          <b-table-column field="" label="Actions" width="165" centered>
             <button class="button field is-small" @click="addComment(props.row)" style="margin-right: 10px;">
               Comment
             </button>
@@ -64,8 +64,8 @@
             </button>
           </b-table-column>
 
-          <b-table-column label="Done" width="50" class="done-action">
-            <input type="checkbox" name="done" />
+          <b-table-column label="Done" width="50" class="done-action" centered>
+            <b-checkbox :value="props.row.eventDone" @input="handleDone" />
           </b-table-column>
         </template>
 
@@ -117,6 +117,12 @@ export default {
   },
   computed: {},
   methods: {
+    handleDone(value){
+      this.$store.dispatch('UPDATE_DONE_EVENT_ATTENDEE', {
+        eventAttendeeId: this.selected.eventAttendeeId,
+        done: value
+      });
+    },
     addComment(row) {
       this.selected = row;
       const { comment, eventAttendeeId } = this.selected;

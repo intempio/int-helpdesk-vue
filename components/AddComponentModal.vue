@@ -23,7 +23,7 @@ export default {
   methods: {
     async updateComment() {
       const loadingComponent = this.$loading.open();
-      await this.$store.dispatch('UPDATE_EVENT_ATTENDEE', {
+      await this.$store.dispatch('UPDATE_COMMENT_EVENT_ATTENDEE', {
         eventAttendeeId: this.eventAttendeeId,
         comment: this.formComment,
       });
