@@ -3,7 +3,7 @@
     <div class="columns is-mobile">
       <div class="column">
         <b-field>
-          <img src="http://intempio.com/wp-content/uploads/2018/05/INTEMPIO_FINAL_Tag1.png" width="500" />
+          <img src="http://intempio.com/wp-content/uploads/2018/05/INTEMPIO_FINAL_Tag1.png" class="site-logo" />
         </b-field>
       </div>
       <div class="column is-half is-offset-one-quarter">
@@ -29,7 +29,7 @@
           </b-table-column>
 
           <b-table-column label="Email" width="150">
-            {{ props.row.attendeeFullName }}
+            {{ props.row.attendeeEmail }}
           </b-table-column>
 
           <b-table-column label="Event Name" width="260" class="eventtd">
@@ -55,7 +55,7 @@
             </a>
           </b-table-column>
 
-          <b-table-column field="" label="Actions" width="200">
+          <b-table-column field="" label="Actions" width="165">
             <button class="button field is-small" @click="addComment(props.row)" style="margin-right: 10px;">
               Comment
             </button>
@@ -64,7 +64,7 @@
             </button>
           </b-table-column>
 
-          <b-table-column label="Done" width="50">
+          <b-table-column label="Done" width="50" class="done-action">
             <input type="checkbox" name="done" />
           </b-table-column>
         </template>
