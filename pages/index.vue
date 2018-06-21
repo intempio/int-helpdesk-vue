@@ -21,7 +21,7 @@
 
         <template slot-scope="props">
           <b-table-column label="Program ID">
-            {{ props.row.eventId }}
+            {{ props.row.eventProgramId }}
           </b-table-column>
 
           <b-table-column label="Attendee" width="175">
