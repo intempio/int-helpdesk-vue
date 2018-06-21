@@ -110,11 +110,27 @@ const createStore = () => {
         );
         commit('set_event_attendees', response.records);
       },
-      async UPDATE_EVENT_ATTENDEE({ dispatch }, { eventAttendeeId, comment }) {
+      async UPDATE_COMMENT_EVENT_ATTENDEE(
+        { dispatch },
+        { eventAttendeeId, comment }
+      ) {
         await this.$axios.$patch(
           `/Event_Attendee/${eventAttendeeId}?` + API_KEY_STRING,
           {
             fields: { comment },
+          }
+        );
+
+        dispatch('GET_EVENT_ATTENDEES');
+      },
+      async UPDATE_DONE_EVENT_ATTENDEE(
+        { dispatch },
+        { eventAttendeeId, done }
+      ) {
+        await this.$axios.$patch(
+          `/Event_Attendee/${eventAttendeeId}?` + API_KEY_STRING,
+          {
+            fields: { done },
           }
         );
 
