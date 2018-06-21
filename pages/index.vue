@@ -70,7 +70,7 @@
         </template>
 
         <template slot="bottom-left">
-          <button class="button field is-primary is-small" @click="selected = null" v-show="selected">
+          <button class="button field is-primary is-small clear-btn" @click="selected = null" v-show="selected">
             <b-icon icon="close"></b-icon>
             <span>Clear selected</span>
           </button>
@@ -117,10 +117,10 @@ export default {
   },
   computed: {},
   methods: {
-    handleDone(value){
+    handleDone(value) {
       this.$store.dispatch('UPDATE_DONE_EVENT_ATTENDEE', {
         eventAttendeeId: this.selected.eventAttendeeId,
-        done: value
+        done: value,
       });
     },
     addComment(row) {
