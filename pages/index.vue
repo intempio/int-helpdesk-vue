@@ -18,7 +18,7 @@
           </div>
           <div class="column">
             <b-field>
-              <a href="/">
+              <a @click="resetSearchString">
                 <b-icon icon="home" size="is-medium"></b-icon>
               </a>
             </b-field>
@@ -128,6 +128,9 @@ export default {
   },
   computed: {},
   methods: {
+    resetSearchString() {
+      this.searchString = '';
+    },
     handleDone(event) {
       // this.$store.dispatch('UPDATE_DONE_EVENT_ATTENDEE', {
       //   eventAttendeeId: this.selected.eventAttendeeId,
