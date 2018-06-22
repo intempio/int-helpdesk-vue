@@ -125,6 +125,7 @@ img.site-logo {
 body {
   border-bottom: #74bd43 solid 2px;
   border-top: #74bd43 solid 2px;
+  min-height: 100vh;
 }
 .done-action span {
   margin-left: 15px;
@@ -138,4 +139,16 @@ body {
 }
 .columns.is-mobile > .column.is-offset-one-quarter {
   margin-top: 85px;
+}
+.clear-btn span:last-child {
+  text-transform: capitalize;
+}
+.clear-btn .mdi-24px.mdi:before {
+  font-size: 14px;
+}
+.mdi-home {
+  color: #74bd43;
+}
+.s-field.column.is-offset-one-fifth {
+  margin-left: 12%;
 }
