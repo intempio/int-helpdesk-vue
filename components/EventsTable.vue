@@ -1,5 +1,5 @@
 <template>
-  <b-table :data="$store.getters.searchData" @select="selectRow" :selected="$store.state.selected" :paginated="true" :per-page="10" style="width: 100%">
+  <b-table :data="$store.getters.searchData" @select="selectRow" :selected.sync="$store.state.selected" :paginated="true" :per-page="10" style="width: 100%">
 
     <template slot-scope="props">
       <b-table-column label="Program ID">
