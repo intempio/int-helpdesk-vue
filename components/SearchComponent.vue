@@ -29,9 +29,6 @@
 
 <script>
 export default {
-  data() {
-    return {}
-  },
   methods: {
     clearSearchString() {
       this.$store.commit('set_search_string', '')

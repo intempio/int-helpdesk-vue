@@ -1,5 +1,5 @@
 <template>
-  <b-table html :data="$store.getters.searchData" :row-class="(row) => row.event && row.event.is_today && 'is-info'" @select="selectRow" :selected="this.$store.state.selected" :paginated="true" :per-page="10" style="width: 100%">
+  <b-table :data="$store.getters.searchData" @select="selectRow" :selected="$store.state.selected" :paginated="true" :per-page="10" style="width: 100%">
 
     <template slot-scope="props">
       <b-table-column label="Program ID">
@@ -52,7 +52,7 @@
     </template>
 
     <template slot="bottom-left">
-      <button class="button field is-primary is-small clear-btn" @click="$store.state.selected = null" v-show="$store.state.selected ">
+      <button class="button field is-primary is-small clear-btn" @click="$store.state.selected = null" v-show="$store.state.selected">
         <b-icon icon="close"></b-icon>
         <span>Clear selected</span>
       </button>
