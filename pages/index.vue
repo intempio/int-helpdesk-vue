@@ -2,8 +2,8 @@
   <section class="section">
     <search-component />
     <div v-if="$store.getters.searchData.length !== 0">
-      <EventsTable />
-      <AssignEventsTable v-if="this.$store.state.selected" class="section" :attendee="this.$store.state.selected" />
+      <events-table />
+      <assign-events-table v-if="this.$store.state.selected" class="section" :attendee="this.$store.state.selected" />
     </div>
 
     <div class="columns is-mobile" v-if="$store.state.searchString && $store.getters.searchData.length === 0" style="margin-top: 200px">
