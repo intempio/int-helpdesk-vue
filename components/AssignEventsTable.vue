@@ -1,8 +1,8 @@
 <template>
   <section>
     <div class="title" id="assign-event">
-      <template v-if="attendee.attendeeId">
-        Assign Event for {{attendee.attendeeFullName}}
+      <template v-if="$store.state.selected">
+        Assign Event for {$store.state.selected.attendeeFullName}}
       </template>
       <template v-else>
         Select Attendee
@@ -21,7 +21,7 @@
           </b-table-column>
 
           <b-table-column label="Assign">
-            <a class="button is-small is-link" @click="confirm(props.row)" v-if="attendee.attendeeId">
+            <a class="button is-small is-link" @click="confirm(props.row)" v-if="$store.state.selected">
               Assign Event
             </a>
           </b-table-column>
@@ -33,32 +33,31 @@
 
 <script>
 export default {
-  props: {
-    attendee: Object,
-  },
   name: 'AssignEventsTable',
   methods: {
     confirm(row) {
       this.$dialog.confirm({
         message: `Assign <strong>${
-          this.attendee.attendeeFullName
+          this.$store.state.selected.attendeeFullName
         }</strong> to <strong>${row.fields.topic}</strong>?`,
         onConfirm: () => this.createEventAttendee(row),
         confirmText: 'Confirm',
-      });
+      })
     },
     async createEventAttendee(row) {
-      const loadingComponent = this.$loading.open();
+      const loadingComponent = this.$loading.open()
       await this.$store.dispatch('CREATE_EVENT_ATTENDEE', {
         event: row.id,
-        attendee: this.attendee.attendeeId,
-      });
-      loadingComponent.close();
+        attendee: this.$store.state.selected.attendeeId,
+      })
+      loadingComponent.close()
       this.$toast.open(
-        `Assigned ${this.attendee.attendeeFullName} to ${row.fields.topic}.`
-      );
-      this.$scrollTo('#search');
+        `Assigned ${this.$store.state.selected.attendeeFullName} to ${
+          row.fields.topic
+        }.`
+      )
+      this.$scrollTo('#search')
     },
   },
-};
+}
 </script>

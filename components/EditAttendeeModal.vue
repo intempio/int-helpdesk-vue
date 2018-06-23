@@ -44,23 +44,23 @@ export default {
   ],
   methods: {
     async updateAttendee() {
-      const loadingComponent = this.$loading.open();
+      const loadingComponent = this.$loading.open()
       const {
         attendeeFirstName,
         attendeeLastName,
         attendeeEmail,
         attendeeRole,
-      } = this.formData;
+      } = this.formData
       await this.$store.dispatch('UPDATE_ATTENDEE', {
         attendeeId: this.attendeeId,
         attendeeFirstName,
         attendeeLastName,
         attendeeEmail,
         attendeeRole,
-      });
-      loadingComponent.close();
-      this.$store.commit('set_edit_attendee_modal_active');
-      await this.$store.dispatch('nuxtClientInit');
+      })
+      loadingComponent.close()
+      this.$store.commit('set_edit_attendee_modal_active')
+      await this.$store.dispatch('nuxtClientInit')
     },
   },
   data() {
@@ -71,7 +71,7 @@ export default {
         attendeeEmail: this.attendeeEmail,
         attendeeRole: this.attendeeRole,
       },
-    };
+    }
   },
-};
+}
 </script>
