@@ -2,7 +2,7 @@
   <section>
     <div class="title" id="assign-event">
       <template v-if="$store.state.selected">
-        Assign Event for {$store.state.selected.attendeeFullName}}
+        Assign Event for {{$store.state.selected.attendeeFullName}}
       </template>
       <template v-else>
         Select Attendee
