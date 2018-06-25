@@ -1,4 +1,4 @@
-const pkg = require('./package');
+const pkg = require('./package')
 
 module.exports = {
   mode: 'spa',
@@ -7,33 +7,33 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: pkg.name,
+    title: 'Helpdesk',
     meta: [
-      {charset: 'utf-8'},
-      {name: 'viewport', content: 'width=device-width, initial-scale=1'},
-      {hid: 'description', name: 'description', content: pkg.description},
+      { charset: 'utf-8' },
+      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { hid: 'description', name: 'description', content: pkg.description },
     ],
-    link: [{rel: 'icon', type: 'image/x-icon', href: '/favicon.ico'}],
+    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 
   /*
   ** Customize the progress-bar color
   */
-  loading: {color: '#FFFFFF'},
+  loading: { color: '#FFFFFF' },
 
   /*
   ** Global CSS
   */
-  css: [{src: '~assets/css/style.css', lang: 'css'}],
+  css: [{ src: '~assets/css/style.css', lang: 'css' }],
 
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    {src: '~/plugins/nuxt-client-init.js', ssr: false},
+    { src: '~/plugins/nuxt-client-init.js', ssr: false },
     '~plugins/vue-scrollto.js',
     '~plugins/axios',
-    '~plugins/filters'
+    '~plugins/filters',
   ],
 
   /*
@@ -55,7 +55,7 @@ module.exports = {
   axios: {
     proxyHeaders: false,
     baseURL: 'https://api.airtable.com/v0/appyYO6TiExpMlFjt',
-    debug: true
+    debug: true,
   },
 
   /*
@@ -74,8 +74,8 @@ module.exports = {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/,
-        });
+        })
       }
     },
   },
-};
+}
