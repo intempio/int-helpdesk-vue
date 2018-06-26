@@ -128,6 +128,9 @@ const createStore = () => {
 
         return sortBy(output, ['eventDate'])
       },
+      eventsToday: state => {
+        return sortBy(state.events, ['fields.meeting_date'])
+      },
     },
     actions: {
       async GET_ATTENDEES({ commit }) {
