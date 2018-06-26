@@ -106,6 +106,7 @@ const createStore = () => {
                     : '',
                   redirectLookupId: foundObj.fields.redirect_lookup_id,
                   comment: foundObj.fields.comment || '',
+                  now: foundObj.fields.now[0],
                 })
               }
             })
@@ -117,6 +118,7 @@ const createStore = () => {
               attendeeLastName: last_name,
               attendeeRole: role,
               attendeeEmail: email,
+              now: 1,
             })
           }
         })
@@ -126,10 +128,12 @@ const createStore = () => {
             .includes(state.searchString.toLowerCase())
         })
 
-        return sortBy(output, ['eventDate'])
+        return sortBy(output, ['eventDate']).filter(event => event.now > 0)
       },
       eventsToday: state => {
-        return sortBy(state.events, ['fields.meeting_date'])
+        return sortBy(state.events, ['fields.meeting_date']).filter(
+          event => event.fields.now > 0
+        )
       },
     },
     actions: {
