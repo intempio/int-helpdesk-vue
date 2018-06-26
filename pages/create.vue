@@ -30,7 +30,7 @@
     </div>
 
     <div class="columns">
-      <b-table html :data="$store.state.events" :paginated="true" :per-page="10" style="width: 100%">
+      <b-table html :data="$store.getters.eventsToday" :paginated="true" :per-page="10" style="width: 100%">
 
         <template slot-scope="props">
           <b-table-column label="Event Name">
