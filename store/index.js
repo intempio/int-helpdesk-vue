@@ -1,6 +1,8 @@
 import Vuex from 'vuex'
 import { sortBy } from 'lodash'
+const spacetime = require('spacetime')
 
+const NOW = spacetime.now().goto('America/New_York')
 const API_KEY_STRING = '&api_key=keyF5RqI6oSraQNK7'
 
 const createStore = () => {
@@ -99,6 +101,10 @@ const createStore = () => {
                   eventAttendeeId: foundObj.id,
                   eventId: foundObj.fields.event[0],
                   eventDate: foundObj.fields.event_date[0],
+                  eventDateSpaceTime: spacetime(
+                    foundObj.fields.event_date[0],
+                    'America/New_York'
+                  ),
                   eventName: foundObj.fields.event_name[0],
                   eventDone: foundObj.fields.done || false,
                   eventProgramId: foundObj.fields.program_id
@@ -126,10 +132,24 @@ const createStore = () => {
             .includes(state.searchString.toLowerCase())
         })
 
-        return sortBy(output, ['eventDate'])
+        return sortBy(
+          output.filter(data => {
+            if ('eventDateSpaceTime' in data)
+              return data.eventDateSpaceTime.isAfter(NOW)
+            return true
+          }),
+          [o => new Date(o.eventDate), 'eventDateSpaceTime']
+        )
       },
       eventsToday: state => {
-        return sortBy(state.events, ['fields.meeting_date'])
+        return sortBy(
+          state.events.filter(event =>
+            spacetime(event.fields.meeting_date, 'America/New_York').isAfter(
+              NOW
+            )
+          ),
+          [o => new Date(o.fields.meeting_date)]
+        )
       },
     },
     actions: {

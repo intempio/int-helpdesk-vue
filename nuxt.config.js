@@ -65,6 +65,7 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
+    vendor: ['spacetime'],
     extractCSS: true,
     extend(config, ctx) {
       // Run ESLint on save
