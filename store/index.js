@@ -2,7 +2,7 @@ import Vuex from 'vuex'
 import { sortBy } from 'lodash'
 const spacetime = require('spacetime')
 
-const NOW = spacetime.now().goto('America/New_York')
+const NOW = spacetime.today().goto('America/New_York')
 const API_KEY_STRING = '&api_key=keyF5RqI6oSraQNK7'
 
 const createStore = () => {
@@ -135,7 +135,7 @@ const createStore = () => {
         return sortBy(
           output.filter(data => {
             if ('eventDateSpaceTime' in data)
-              return data.eventDateSpaceTime.isAfter(NOW)
+              return data.eventDateSpaceTime.isSame(NOW, 'date')
             return true
           }),
           [o => new Date(o.eventDate), 'eventDateSpaceTime']
@@ -144,8 +144,9 @@ const createStore = () => {
       eventsToday: state => {
         return sortBy(
           state.events.filter(event =>
-            spacetime(event.fields.meeting_date, 'America/New_York').isAfter(
-              NOW
+            spacetime(event.fields.meeting_date, 'America/New_York').isSame(
+              NOW,
+              'date'
             )
           ),
           [o => new Date(o.fields.meeting_date)]
