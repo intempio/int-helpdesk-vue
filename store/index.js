@@ -2,7 +2,8 @@ import Vuex from 'vuex'
 import { sortBy } from 'lodash'
 const spacetime = require('spacetime')
 
-const NOW = spacetime.today().goto('America/New_York')
+const NOW = spacetime.now().goto('America/New_York')
+console.log(NOW.format('numeric-uk'))
 const API_KEY_STRING = '&api_key=keyF5RqI6oSraQNK7'
 
 const createStore = () => {
