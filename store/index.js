@@ -1,5 +1,5 @@
 import Vuex from 'vuex'
-import { sortBy } from 'lodash'
+import { sortBy, unionBy } from 'lodash'
 const spacetime = require('spacetime')
 
 const NOW = spacetime.now().goto('America/New_York')
@@ -28,13 +28,17 @@ const createStore = () => {
     },
     mutations: {
       set_attendees(state, attendees) {
-        state.attendees = attendees
+        state.attendees = unionBy(attendees, state.attendees, 'id')
       },
       set_events(state, events) {
         state.events = events
       },
       set_event_attendees(state, event_attendees) {
-        state.event_attendees = event_attendees
+        state.event_attendees = unionBy(
+          event_attendees,
+          state.event_attendees,
+          'id'
+        )
       },
       set_loading(state) {
         state.loading = !state.loading
@@ -156,22 +160,37 @@ const createStore = () => {
     },
     actions: {
       async GET_ATTENDEES({ commit }) {
-        const response = await this.$axios.$get(
-          '/Attendees?maxRecords=500&view=Grid%20view' + API_KEY_STRING
+        let { offset, records } = await this.$axios.$get(
+          '/Attendees?view=Grid%20view' + API_KEY_STRING
         )
-        commit('set_attendees', response.records)
+        commit('set_attendees', records)
+
+        if (offset) {
+          let response = await this.$axios.$get(
+            `/Attendees?view=Grid%20view&offset=${offset}` + API_KEY_STRING
+          )
+          commit('set_attendees', response.records)
+          // console.log(response.offset)
+        }
       },
       async GET_EVENTS({ commit }) {
         const response = await this.$axios.$get(
-          '/Events?maxRecords=500&view=Today' + API_KEY_STRING
+          '/Events?view=Today' + API_KEY_STRING
         )
         commit('set_events', response.records)
       },
       async GET_EVENT_ATTENDEES({ commit }) {
-        const response = await this.$axios.$get(
-          '/Event_Attendee?maxRecords=500&view=Today' + API_KEY_STRING
+        const { offset, records } = await this.$axios.$get(
+          '/Event_Attendee?view=Today' + API_KEY_STRING
         )
-        commit('set_event_attendees', response.records)
+        commit('set_event_attendees', records)
+
+        if (offset) {
+          const response = await this.$axios.$get(
+            `/Event_Attendee?view=Today&offset=${offset}` + API_KEY_STRING
+          )
+          commit('set_event_attendees', response.records)
+        }
       },
       async UPDATE_COMMENT_EVENT_ATTENDEE(
         { dispatch },
