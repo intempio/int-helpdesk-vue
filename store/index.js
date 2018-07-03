@@ -160,37 +160,46 @@ const createStore = () => {
     },
     actions: {
       async GET_ATTENDEES({ commit }) {
-        let { offset, records } = await this.$axios.$get(
-          '/Attendees?view=Grid%20view' + API_KEY_STRING
-        )
-        commit('set_attendees', records)
-
-        if (offset) {
-          let response = await this.$axios.$get(
-            `/Attendees?view=Grid%20view&offset=${offset}` + API_KEY_STRING
-          )
-          commit('set_attendees', response.records)
-          // console.log(response.offset)
+        let totalRecords = []
+        const axios = this.$axios
+        async function fetchRecords(url) {
+          let { offset, records } = await axios.$get(url)
+          totalRecords = [...totalRecords, ...records]
+          if (offset) {
+            await fetchRecords(url + `&offset=${offset}`)
+          }
         }
+
+        await fetchRecords('/Attendees?view=Grid%20view' + API_KEY_STRING)
+        commit('set_attendees', totalRecords)
       },
       async GET_EVENTS({ commit }) {
-        const response = await this.$axios.$get(
-          '/Events?view=Today' + API_KEY_STRING
-        )
-        commit('set_events', response.records)
+        let totalRecords = []
+        const axios = this.$axios
+        async function fetchRecords(url) {
+          let { offset, records } = await axios.$get(url)
+          totalRecords = [...totalRecords, ...records]
+          if (offset) {
+            await fetchRecords(url + `&offset=${offset}`)
+          }
+        }
+
+        await fetchRecords('/Events?view=Today' + API_KEY_STRING)
+        commit('set_events', totalRecords)
       },
       async GET_EVENT_ATTENDEES({ commit }) {
-        const { offset, records } = await this.$axios.$get(
-          '/Event_Attendee?view=Today' + API_KEY_STRING
-        )
-        commit('set_event_attendees', records)
-
-        if (offset) {
-          const response = await this.$axios.$get(
-            `/Event_Attendee?view=Today&offset=${offset}` + API_KEY_STRING
-          )
-          commit('set_event_attendees', response.records)
+        let totalRecords = []
+        const axios = this.$axios
+        async function fetchRecords(url) {
+          let { offset, records } = await axios.$get(url)
+          totalRecords = [...totalRecords, ...records]
+          if (offset) {
+            await fetchRecords(url + `&offset=${offset}`)
+          }
         }
+
+        await fetchRecords('/Event_Attendee?view=Today' + API_KEY_STRING)
+        commit('set_event_attendees', totalRecords)
       },
       async UPDATE_COMMENT_EVENT_ATTENDEE(
         { dispatch },
