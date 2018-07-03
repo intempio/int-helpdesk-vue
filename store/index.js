@@ -157,19 +157,19 @@ const createStore = () => {
     actions: {
       async GET_ATTENDEES({ commit }) {
         const response = await this.$axios.$get(
-          '/Attendees?maxRecords=200&view=Grid%20view' + API_KEY_STRING
+          '/Attendees?maxRecords=500&view=Grid%20view' + API_KEY_STRING
         )
         commit('set_attendees', response.records)
       },
       async GET_EVENTS({ commit }) {
         const response = await this.$axios.$get(
-          '/Events?maxRecords=200&view=Today' + API_KEY_STRING
+          '/Events?maxRecords=500&view=Today' + API_KEY_STRING
         )
         commit('set_events', response.records)
       },
       async GET_EVENT_ATTENDEES({ commit }) {
         const response = await this.$axios.$get(
-          '/Event_Attendee?maxRecords=200&view=Today' + API_KEY_STRING
+          '/Event_Attendee?maxRecords=500&view=Today' + API_KEY_STRING
         )
         commit('set_event_attendees', response.records)
       },
