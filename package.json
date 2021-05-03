@@ -5,6 +5,7 @@
   "author": "Rustan Corpuz",
   "private": true,
   "scripts": {
+    "postinstall": "patch-package",
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
@@ -13,10 +14,11 @@
     "precommit": "npm run lint"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.0.0",
-    "lodash": "^4.17.10",
-    "nuxt": "^1.0.0",
-    "nuxt-buefy": "^0.0.4",
+    "@nuxtjs/axios": "^5.13.1",
+    "lodash": "^4.17.21",
+    "nuxt": "^2.15.4",
+    "nuxt-buefy": "^0.4.7",
+    "patch-package": "^6.4.7",
     "spacetime": "^4.2.2",
     "vue-scrollto": "^2.11.0"
   },
